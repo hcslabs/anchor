@@ -47,8 +47,8 @@ Internal validation in progress. The page covers:
   Retarget → Package → Serve), with an honest accounting of what's validated,
   partially validated, and still in development
 
-What's deliberately withheld from any diagram on this page: the Trust + Gates
-classification logic and the retargeting correspondence/shape-fitting method.
+What's deliberately closed as of now from any diagram on this page: the Trust + Gates
+classification logic and the retargeting correspondence/shape-fitting method (coming soon).
 See `assets/anchor_acquisition_figure.png` for how that's represented visually
 (dashed borders, lock indicator).
 
