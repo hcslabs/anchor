@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>real2sim — Video-to-Robot Motion Data Pipeline | HCS Labs</title>
+<meta name="description" content="A data pipeline that converts ordinary monocular video into simulation-ready, robot-targeted motion data — at a fraction of the cost and timescale of traditional motion capture.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+
+:root {
+  --bg: #F0F4FF;
+  --bg-raised: #F5F8FF;
+  --bg-card: #FFFFFF;
+  --line: rgba(66, 62, 62, 0.1);
+  --line-bright: rgba(38, 99, 235, 0.28);
+  --text: #1A1A1A;
+  --text-dim: #425466;
+  --text-faint: #6B7280;
+  --accent: #2663EB;
+  --accent-bright: #1948B3;
+  --amber: #B6701E;
+  --amber-bright: #8A5300;
+  --teal: #0F6E56;
+  --teal-bright: #0B5743;
+  --mono: "DM Mono", "SF Mono", Consolas, monospace;
+  --sans: "Noto Sans JP", -apple-system, "Hiragino Sans", sans-serif;
+  --max-w: 1180px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+.wrap { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+@media (max-width: 640px) { .wrap { padding: 0 20px; } }
+
+/* ---------- Nav ---------- */
+nav.topbar {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(240, 244, 255, 0.88);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--line);
+}
+nav.topbar .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+.brand { font-family: var(--mono); font-size: 15px; letter-spacing: 0.02em; color: var(--text); display: flex; align-items: center; gap: 8px; }
+.brand .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px rgba(38,99,235,0.5); }
+.navlinks { display: flex; gap: 28px; font-family: var(--mono); font-size: 13px; }
+.navlinks a { color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.04em; }
+.navlinks a:hover { color: var(--accent); text-decoration: none; }
+@media (max-width: 720px) { .navlinks { display: none; } }
+
+/* ---------- Hero ---------- */
+.hero { padding: 88px 0 56px; position: relative; overflow: hidden; }
+.hero::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 800px 400px at 50% -10%, rgba(38,99,235,0.07), transparent 70%);
+  pointer-events: none;
+}
+.eyebrow {
+  font-family: var(--sans); font-size: 13px; letter-spacing: 0.1em; color: var(--text-dim);
+  text-transform: uppercase; margin-bottom: 18px; display: flex; align-items: center; gap: 10px;
+  border: 1px solid rgba(66,84,102,0.22); background: rgba(66,84,102,0.05);
+  padding: 6px 14px; border-radius: 999px; width: fit-content;
+}
+h1.headline {
+  font-family: var(--sans); font-weight: 700; font-size: clamp(32px, 5vw, 52px);
+  line-height: 1.12; letter-spacing: -0.02em; color: var(--text); max-width: 880px;
+}
+h1.headline .accent-text { color: var(--accent); }
+.sub {
+  margin-top: 22px; font-size: 18px; color: var(--text-dim); max-width: 640px; line-height: 1.75;
+}
+.hero-meta {
+  margin-top: 36px; display: flex; gap: 28px; flex-wrap: wrap; font-family: var(--mono); font-size: 13px; color: var(--text-faint);
+}
+
+.abstract-box {
+  margin-top: 32px; padding: 24px 26px; border-radius: 4px; max-width: 760px;
+  background: var(--bg-card); border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  box-shadow: 0 1px 3px rgba(20,30,60,0.04);
+}
+.abstract-k {
+  font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 10px;
+}
+.abstract-box p { font-size: 15px; color: var(--text-dim); line-height: 1.7; }
+
+.stage-graph-wrap {
+  margin-top: 28px; border: 1px solid var(--line); border-radius: 4px; overflow-x: auto; background: var(--bg-card);
+  box-shadow: 0 1px 3px rgba(20,30,60,0.04);
+}
+.stage-graph-wrap img { display: block; min-width: 640px; width: 100%; }
+@media (max-width: 720px) { .stage-graph-wrap img { width: 880px; max-width: none; } }
+
+.trust-wrap {
+  margin-top: 24px; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; background: var(--bg-card);
+  box-shadow: 0 1px 3px rgba(20,30,60,0.04);
+}
+.trust-wrap img { width: 100%; display: block; }
+.hero-meta span b { color: var(--text-dim); font-weight: 500; }
+.hero-links { margin-top: 28px; display: flex; gap: 12px; flex-wrap: wrap; }
+.pill {
+  font-family: var(--mono); font-size: 13px; padding: 9px 18px; border-radius: 2px;
+  border: 1px solid var(--line-bright); color: var(--text-dim); transition: all 0.15s ease;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.pill:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; background: rgba(38,99,235,0.05); }
+.pill.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+.pill.primary:hover { background: var(--accent-bright); color: #fff; }
+.pill.soon { color: var(--amber-bright); border-color: rgba(182,112,30,0.35); background: rgba(182,112,30,0.06); cursor: default; }
+.pill.soon:hover { border-color: rgba(182,112,30,0.35); background: rgba(182,112,30,0.06); }
+
+/* ---------- Lineage strip (signature element) ---------- */
+.lineage {
+  margin-top: 64px; border: 1px solid var(--line); border-radius: 4px; overflow: hidden;
+  background: var(--bg-card); box-shadow: 0 1px 3px rgba(20,30,60,0.04);
+}
+.lineage-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); }
+@media (max-width: 860px) { .lineage-row { grid-template-columns: repeat(2, 1fr); } }
+.lineage-cell {
+  position: relative; aspect-ratio: 3/4; overflow: hidden; background: var(--bg-card);
+}
+.lineage-cell img { width: 100%; height: 100%; object-fit: cover; object-position: center 15%; display: block; }
+.lineage-cell .tag {
+  position: absolute; bottom: 0; left: 0; right: 0; padding: 10px 14px;
+  background: linear-gradient(to top, rgba(10,12,20,0.78), transparent);
+  font-family: var(--mono); font-size: 11.5px; color: #fff; letter-spacing: 0.02em;
+}
+.lineage-cell .tag .num { color: #8FB3F5; margin-right: 6px; }
+.lineage-foot {
+  padding: 14px 20px; font-family: var(--mono); font-size: 12px; color: var(--text-faint);
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; border-top: 1px solid var(--line);
+}
+
+/* ---------- Sections ---------- */
+section { padding: 88px 0; border-top: 1px solid var(--line); }
+section.flush { border-top: none; }
+.section-label {
+  font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.2em; color: var(--accent);
+  text-transform: uppercase; margin-bottom: 14px;
+}
+h2 {
+  font-family: var(--sans); font-weight: 700; font-size: clamp(24px, 3vw, 32px);
+  color: var(--text); letter-spacing: -0.02em; max-width: 760px; line-height: 1.2;
+}
+.lede { margin-top: 16px; font-size: 17px; color: var(--text-dim); max-width: 680px; line-height: 1.75; }
+
+/* ---------- Two-column compare (mocap vs pipeline) ---------- */
+.compare-img { margin-top: 48px; border-radius: 4px; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 1px 3px rgba(20,30,60,0.04); }
+.compare-img img { width: 100%; display: block; }
+
+/* ---------- Pipeline stage cards ---------- */
+.stage-grid { margin-top: 48px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+@media (max-width: 900px) { .stage-grid { grid-template-columns: repeat(2, 1fr); } }
+.stage-card { background: var(--bg-card); padding: 0; }
+.stage-card .imgwrap { aspect-ratio: 4/3; overflow: hidden; }
+.stage-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.stage-card .body { padding: 20px; }
+.stage-card .idx { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 8px; text-transform: uppercase; }
+.stage-card h3 { font-size: 15.5px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.stage-card p { font-size: 13.5px; color: var(--text-faint); line-height: 1.55; }
+
+/* ---------- Status badges ---------- */
+.status-row { margin-top: 56px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 760px) { .status-row { grid-template-columns: 1fr; } }
+.status-card { border: 1px solid var(--line); border-radius: 4px; padding: 24px 26px; background: var(--bg-card); box-shadow: 0 1px 3px rgba(20,30,60,0.04); }
+.status-card.open { border-color: rgba(15,110,86,0.3); }
+.status-card.soon { border-color: rgba(182,112,30,0.28); }
+.status-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.badge { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; padding: 4px 10px; border-radius: 2px; text-transform: uppercase; }
+.badge.open { background: rgba(15,110,86,0.1); color: var(--teal-bright); border: 1px solid rgba(15,110,86,0.25); }
+.badge.soon { background: rgba(182,112,30,0.1); color: var(--amber-bright); border: 1px solid rgba(182,112,30,0.25); }
+.status-card h4 { font-size: 16px; color: var(--text); font-weight: 600; }
+.status-card ul { list-style: none; margin-top: 6px; }
+.status-card li { font-size: 14px; color: var(--text-dim); padding: 7px 0; border-top: 1px solid var(--line); display: flex; gap: 10px; }
+.status-card li:first-child { border-top: none; }
+.status-card li::before { content: "—"; color: var(--text-faint); flex-shrink: 0; }
+
+/* ---------- Benchmark table ---------- */
+.bench-table { margin-top: 40px; width: 100%; border-collapse: collapse; font-size: 14.5px; background: var(--bg-card); }
+.bench-table th, .bench-table td { padding: 14px 18px; text-align: left; border-bottom: 1px solid var(--line); }
+.bench-table th { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-faint); font-weight: 500; }
+.bench-table td { color: var(--text-dim); font-family: var(--mono); font-size: 13.5px; }
+.bench-table tr.ours td { color: var(--teal-bright); font-weight: 600; }
+.bench-table tr.ours { background: rgba(15,110,86,0.06); }
+.bench-note { margin-top: 16px; font-size: 12.5px; color: var(--text-faint); }
+.bench-note a { color: var(--text-faint); text-decoration: underline; }
+
+.metric-pending { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 10px; }
+.metric-chip {
+  font-family: var(--mono); font-size: 12.5px; padding: 8px 14px; border-radius: 2px;
+  border: 1px solid rgba(182,112,30,0.3); color: var(--amber-bright); background: rgba(182,112,30,0.06);
+}
+
+/* ---------- Paper-style pipeline figure ---------- */
+.paper-fig-wrap {
+  margin-top: 48px; border: 1px solid var(--line); border-radius: 4px; overflow: hidden;
+  background: var(--bg-card); box-shadow: 0 1px 3px rgba(20,30,60,0.04); padding: 8px;
+}
+.paper-fig-wrap img { width: 100%; display: block; }
+.fig-caption { margin-top: 14px; font-size: 13px; color: var(--text-faint); max-width: 680px; line-height: 1.6; }
+
+/* ---------- Acquisition section ---------- */
+.acq-intro { margin-top: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+@media (max-width: 860px) { .acq-intro { grid-template-columns: 1fr; gap: 32px; } }
+.acq-intro p { font-size: 15.5px; color: var(--text-dim); line-height: 1.75; }
+.acq-intro p + p { margin-top: 14px; }
+
+.source-chips { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px; }
+.source-chip {
+  font-family: var(--mono); font-size: 12px; padding: 6px 12px; border-radius: 999px;
+  border: 1px solid var(--line-bright); color: var(--text-dim); background: rgba(38,99,235,0.04);
+}
+
+/* Funnel diagram — signature element for this section */
+.funnel {
+  margin-top: 0; border: 1px solid var(--line); border-radius: 4px; background: var(--bg-card);
+  box-shadow: 0 1px 3px rgba(20,30,60,0.04); padding: 28px 26px;
+}
+.funnel-stage { position: relative; padding: 16px 0; }
+.funnel-stage + .funnel-stage { border-top: 1px dashed var(--line); }
+.funnel-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.funnel-name { font-family: var(--sans); font-weight: 600; font-size: 14.5px; color: var(--text); }
+.funnel-tech { font-family: var(--mono); font-size: 11.5px; color: var(--accent); letter-spacing: 0.02em; text-align: right; }
+.funnel-desc { margin-top: 5px; font-size: 13px; color: var(--text-faint); line-height: 1.55; max-width: 92%; }
+.funnel-bar-wrap { margin-top: 10px; height: 6px; border-radius: 3px; background: rgba(66,84,102,0.08); overflow: hidden; }
+.funnel-bar { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent), var(--teal)); }
+.funnel-stage.locked .funnel-name { color: var(--teal-bright); }
+.funnel-stage.locked .funnel-bar { background: var(--teal); }
+.funnel-stage.locked { background: repeating-linear-gradient(135deg, transparent, transparent 11px, rgba(15,110,86,0.05) 11px, rgba(15,110,86,0.05) 12px); }
+.funnel-row.locked-row { gap: 8px; }
+.funnel-lock { position: relative; width: 13px; height: 12px; flex-shrink: 0; }
+.funnel-lock .shackle { position: absolute; top: 0; left: 3.5px; width: 6px; height: 6px; border: 1.5px solid var(--teal-bright); border-bottom: none; border-radius: 5px 5px 0 0; }
+.funnel-lock .body { position: absolute; bottom: 0; left: 1.5px; width: 10px; height: 8px; background: var(--teal-bright); border-radius: 2px; }
+.funnel-lock .body::after { content: ''; position: absolute; bottom: 2px; left: 4.2px; width: 1.6px; height: 1.6px; background: var(--bg-card); border-radius: 50%; }
+
+.acq-callout {
+  margin-top: 40px; padding: 26px 28px; border-radius: 4px; background: var(--bg-card);
+  border: 1px solid rgba(15,110,86,0.28); border-left: 3px solid var(--teal);
+  box-shadow: 0 1px 3px rgba(20,30,60,0.04);
+}
+.acq-callout .k { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal-bright); margin-bottom: 10px; }
+.acq-callout p { font-size: 15px; color: var(--text-dim); line-height: 1.7; }
+
+
+
+.bg-grid { margin-top: 40px; display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: start; }
+@media (max-width: 860px) { .bg-grid { grid-template-columns: 1fr; gap: 32px; } }
+.bg-grid p { font-size: 15.5px; color: var(--text-dim); margin-bottom: 16px; }
+.bg-grid p:last-child { margin-bottom: 0; }
+.credit-box { border: 1px solid var(--line); border-radius: 4px; padding: 22px 24px; background: var(--bg-card); box-shadow: 0 1px 3px rgba(20,30,60,0.04); }
+.credit-box .k { font-family: var(--mono); font-size: 12px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+.credit-box p { font-size: 13.5px; color: var(--text-dim); line-height: 1.65; }
+.credit-box + .credit-box { margin-top: 16px; }
+
+/* ---------- Footer ---------- */
+footer { padding: 56px 0 64px; border-top: 1px solid var(--line); }
+footer .wrap { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+footer .fnote { font-family: var(--mono); font-size: 12.5px; color: var(--text-faint); }
+footer .fnote a { color: var(--text-faint); }
+
+/* ---------- Aegis relationship section ---------- */
+.aegis-intro { margin-top: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+@media (max-width: 860px) { .aegis-intro { grid-template-columns: 1fr; gap: 32px; } }
+.aegis-intro p { font-size: 15.5px; color: var(--text-dim); line-height: 1.75; }
+.aegis-intro p + p { margin-top: 14px; }
+
+.shared-stack {
+  border: 1px solid var(--line); border-radius: 4px; background: var(--bg-card);
+  box-shadow: 0 1px 3px rgba(20,30,60,0.04); padding: 24px 26px;
+}
+.shared-stack .k { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+.stack-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 13px 0; border-top: 1px dashed var(--line); }
+.stack-row:first-of-type { border-top: none; }
+.stack-row .name { font-family: var(--sans); font-weight: 600; font-size: 14px; color: var(--text); }
+.stack-row .dest { font-family: var(--mono); font-size: 11.5px; color: var(--text-faint); text-align: right; }
+.stack-row .dest.split { color: var(--teal-bright); }
+.stack-fork {
+  margin-top: 6px; padding: 14px 16px; border-radius: 3px; background: rgba(38,99,235,0.05);
+  border: 1px dashed var(--line-bright); font-size: 13px; color: var(--text-dim); line-height: 1.6;
+}
+.stack-fork b { color: var(--text); }
+
+.aegis-grid { margin-top: 48px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+@media (max-width: 860px) { .aegis-grid { grid-template-columns: 1fr; } }
+.aegis-card { background: var(--bg-card); padding: 22px 24px; }
+.aegis-card .idx { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 8px; text-transform: uppercase; }
+.aegis-card h4 { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+.aegis-card p { font-size: 13.5px; color: var(--text-faint); line-height: 1.6; }
+
+/* Video section: simulation + real-world, side by side */
+.video-section-label {
+  margin-top: 48px; font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.04em;
+  text-transform: uppercase; color: var(--text-faint); text-align: center;
+}
+.video-grid { margin-top: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+@media (max-width: 860px) { .video-grid { grid-template-columns: 1fr; } }
+.video-card {
+  border: 1px solid var(--line); border-radius: 4px; overflow: hidden;
+  background: var(--bg-card); box-shadow: 0 1px 3px rgba(20,30,60,0.04);
+}
+.video-embed { aspect-ratio: 16/9; background: #0B0F1A; }
+.video-embed video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.video-card-foot {
+  padding: 12px 16px; display: flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 12px; color: var(--text-faint); border-top: 1px solid var(--line);
+}
+.video-tag {
+  flex-shrink: 0; padding: 3px 9px; border-radius: 10px; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.02em; text-transform: uppercase;
+}
+.video-tag.sim { background: rgba(38,99,235,0.1); color: var(--accent-bright); }
+.video-tag.real { background: rgba(15,110,86,0.1); color: var(--teal-bright); }
+
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="wrap">
+    <div class="brand"><span class="dot"></span> HCS LABS / real2sim</div>
+    <div class="navlinks">
+      <a href="#pipeline">Pipeline</a>
+      <a href="#aegis">Aegis</a>
+      <a href="#acquisition">Acquisition</a>
+      <a href="#validation">Validation</a>
+      <a href="#status">Status</a>
+      <a href="#background">Background</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Data Infrastructure for Humanoid Imitation Learning</p>
+    <h1 class="headline">Building <span class="accent-text">Anchor</span>: a trust-graded data refinery for humanoid robot learning.</h1>
+    <p class="sub">Anchor turns ordinary human video — handheld clips, warehouse footage, footage you already have — into provenance-verified, feasibility-checked, robot-ready training data. This page documents the acquisition and retargeting engine we've built and validated as Anchor's first working component.</p>
+
+    <div class="abstract-box">
+      <div class="abstract-k">What Anchor is</div>
+      <p>Anchor is an in-development data refinery for humanoid robot learning: a pipeline that ingests human video, verifies its provenance, reconstructs the person and the scene, retargets the motion onto a specific robot's own joints with a feasibility score, and packages the result into a structured, trainable dataset. The thesis is that raw video is no longer the bottleneck for training humanoid policies — trustworthy, training-ready, embodiment-grounded video is. The acquisition and retargeting layer documented on this page is the part of that pipeline we've built and validated first.</p>
+    </div>
+
+    <div class="stage-graph-wrap">
+      <img src="assets/anchor_stage_graph.png" alt="Anchor's seven-stage pipeline. Stages 01 through 04 (Intake, Trust, Gates, Enrich) are partially validated, building on prior Fotographer AI know-how. Stage 05 (Retarget) is validated end to end.">
+    </div>
+
+    <div class="hero-meta">
+      <span><b>Status:</b> Internal validation complete</span>
+      <span><b>Target platform:</b> Unitree G1 (additional platforms in progress)</span>
+      <span><b>Team:</b> HCS Labs</span>
+    </div>
+    <div class="hero-links">
+      <a class="pill primary" href="#pipeline">See the pipeline</a>
+      <a class="pill" href="#validation">Validation results</a>
+      <span class="pill soon">Source — coming soon</span>
+    </div>
+
+    <div class="lineage">
+      <div class="lineage-row">
+        <div class="lineage-cell"><img src="assets/lineage_01_segmentation.png" alt="Person segmentation from raw outdoor video"><div class="tag"><span class="num">01</span>Segmentation</div></div>
+        <div class="lineage-cell"><img src="assets/lineage_02_pose.png" alt="3D human pose reconstruction with joint skeleton overlay"><div class="tag"><span class="num">02</span>3D Pose</div></div>
+        <div class="lineage-cell"><img src="assets/lineage_03_contact.png" alt="Ground contact points detected at the feet"><div class="tag"><span class="num">03</span>Contact</div></div>
+        <div class="lineage-cell"><img src="assets/lineage_04_retargeted.png" alt="Motion retargeted to a Unitree G1 humanoid, same sitting pose"><div class="tag"><span class="num">04</span>Retargeted</div></div>
+      </div>
+      <div class="lineage-foot">
+        <span>↑ actual output from an internal validation run</span>
+        <span>input: single handheld video clip</span>
+      </div>
+    </div>
+  </div>
+</header>
+<section id="pipeline">
+  <div class="wrap">
+    <p class="section-label">01 — Pipeline</p>
+    <h2>One pipeline, two jobs: acquire the data, then fit it to a robot.</h2>
+    <p class="lede">The first half never depends on which robot you're targeting — it reconstructs the person and the scene from raw video. The second half is robot-specific: it takes that reconstruction and maps it onto a target humanoid's actual joints and dynamics.</p>
+
+    <div class="paper-fig-wrap">
+      <img src="assets/anchor_acquisition_figure.png" alt="Anchor pipeline diagram: candidate sources are mined and detected, then captioned by a vision-language model. From there the pipeline branches in two: a trust-and-gates classifier (shown withheld) scores each clip before 3D reconstruction and motion retargeting, while a parallel scene-and-task classifier tags task type, location, and risk level, feeding HCS Labs' Aegis predictive safety system. Reconstructed motion is retargeted onto a target robot's kinematics and packaged as robot-ready output across multiple humanoid platforms.">
+    </div>
+    <p class="fig-caption">End-to-end view of the pipeline above. The dashed, hatched stages are where our actual method lives — what's shown is the shape of the problem, not how we solve it. The same scene-understanding layer that feeds reconstruction also tags task, location, and risk — that branch feeds Aegis, our separate predictive safety system.</p>
+  </div>
+</section>
+
+<section id="aegis">
+  <div class="wrap">
+    <p class="section-label">01.5 — Aegis</p>
+    <h2>The same intake that builds training data also feeds our safety model.</h2>
+    <p class="lede">Anchor was never just a data pipeline. Every clip that's good enough to reconstruct and retarget has already been scene-understood — what task is happening, where, and how risky it is. That second branch is what Aegis, our predictive safety system, is trained and evaluated on. One intake, two downstream products.</p>
+
+    <div class="aegis-intro">
+      <div>
+        <p>Most teams treat "data for training a policy" and "data for evaluating safety" as two separate collection efforts — two pipelines, two budgets, two sets of footage to source and clean. Anchor's intake does both in one pass. The detection and captioning stage that decides whether a clip is worth reconstructing is the same stage that tags what's happening in it — contact-heavy manipulation, proximity to people, occlusion, clutter — the features a predictive safety model actually needs.</p>
+        <p>That shared foundation is why we can offer the data pipeline and Aegis together: the same validated video, the same scene understanding, evaluated against two different questions — <em>can a robot learn this motion</em>, and <em>can a robot do this motion safely, ahead of time</em>.</p>
+      </div>
+
+      <div class="shared-stack">
+        <div class="k">One intake, two consumers</div>
+        <div class="stack-row">
+          <span class="name">Mine + detect + caption</span>
+          <span class="dest">shared</span>
+        </div>
+        <div class="stack-row">
+          <span class="name">Trust + Gates classification</span>
+          <span class="dest">shared</span>
+        </div>
+        <div class="stack-fork">
+          <b>Branch point.</b> From here the same scene-understanding output splits: one path scores feasibility and continues to reconstruction; the other tags task type, proximity, and risk level.
+        </div>
+        <div class="stack-row">
+          <span class="name">Reconstruct → retarget</span>
+          <span class="dest split">→ training data (this page)</span>
+        </div>
+        <div class="stack-row">
+          <span class="name">Risk / task / proximity tagging</span>
+          <span class="dest split">→ HCS Aegis</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="aegis-grid">
+      <div class="aegis-card">
+        <div class="idx">What Aegis does</div>
+        <h4>Predicts unsafe states before they happen</h4>
+        <p>Aegis is a world-model-based safety layer: it predicts a robot's likely future states across multiple time horizons (roughly 0.1s to 5s out), scores the trajectory, and proposes a corrective action — instead of waiting for a physical fault and stopping.</p>
+      </div>
+      <div class="aegis-card">
+        <div class="idx">Why Anchor data helps it</div>
+        <h4>Real scenes, not just simulated ones</h4>
+        <p>Predictive safety models are only as good as the range of real-world situations they've seen. Anchor's intake already filters and tags real handheld and site footage for risk-relevant content — clutter, occlusion, human proximity — which is exactly the distribution a safety model needs and a pure-simulation pipeline can't generate on its own.</p>
+      </div>
+      <div class="aegis-card">
+        <div class="idx">What this means commercially</div>
+        <h4>One validation run, two evaluations</h4>
+        <p>A customer's footage run through Anchor for training data can be evaluated for Aegis at the same time, on the same experiment, with no separate data collection. Aegis can also be engaged as an independent, separately scoped evaluation.</p>
+      </div>
+    </div>
+
+    <div class="video-section-label">Aegis — Predictive Safety Monitor, in simulation and in the real world</div>
+    <div class="video-grid">
+      <div class="video-card">
+        <div class="video-embed">
+          <video autoplay loop muted playsinline>
+            <source src="assets/aegis_demo_sim.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="video-card-foot">
+          <span class="video-tag sim">Simulation</span>
+          <span>World-model prediction running on a simulated scene</span>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-embed">
+          <video autoplay loop muted playsinline>
+            <source src="assets/aegis_demo_real.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="video-card-foot">
+          <span class="video-tag real">Real world</span>
+          <span>Same model, running on real street footage</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="acquisition">
+  <div class="wrap">
+    <p class="section-label">02 — Acquisition</p>
+    <h2>Where the video comes from, and how we know which of it to keep.</h2>
+    <p class="lede">Mining video at internet scale only works if you know which clips are worth keeping. We built a mining pipeline with that filter built in from the start, not bolted on after.</p>
+
+    <div class="acq-intro">
+      <div>
+        <p>Our mining pipeline pairs targeted sourcing with a detection-and-captioning stack built on current-generation multimodal models: identifying who's in frame, what they're doing, and whether the shot is usable, in a single pass.</p>
+        <p>That solves the harder problem most mining pipelines skip: once you have a clip, how do you know if it's any good — physically, legally, or for the robot you're actually training? Alongside the mining and captioning front end, we built the part that's often missing entirely: a classifier that knows the difference between a clip worth keeping and one that isn't.</p>
+        <div class="source-chips">
+          <span class="source-chip">Licensed footage</span>
+          <span class="source-chip">Customer-provided video</span>
+          <span class="source-chip">First-party capture</span>
+          <span class="source-chip">Opt-in web sources</span>
+        </div>
+      </div>
+
+      <div class="funnel">
+        <div class="funnel-stage">
+          <div class="funnel-row">
+            <span class="funnel-name">Mine</span>
+            <span class="funnel-tech">targeted sourcing, not open scraping</span>
+          </div>
+          <div class="funnel-desc">Candidate clips pulled from licensed and consented sources, not bulk-scraped from platforms whose terms forbid it.</div>
+          <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:100%"></div></div>
+        </div>
+        <div class="funnel-stage">
+          <div class="funnel-row">
+            <span class="funnel-name">Detect &amp; caption</span>
+            <span class="funnel-tech">Qwen / Gemini-class VLMs</span>
+          </div>
+          <div class="funnel-desc">Modern multimodal models replace the old detector-plus-captioner combo in one pass: who's in frame, what they're doing, and whether the shot is even usable.</div>
+          <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:78%"></div></div>
+        </div>
+        <div class="funnel-stage locked">
+          <div class="funnel-row locked-row">
+            <span class="funnel-name">Classify &amp; tier</span>
+            <span class="funnel-tech">Anchor Trust + Gates</span>
+            <div class="funnel-lock"><div class="shackle"></div><div class="body"></div></div>
+          </div>
+          <div class="funnel-desc">Every surviving clip is scored and tiered before it ever reaches reconstruction — the step the published approaches skip entirely.</div>
+          <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:46%"></div></div>
+        </div>
+        <div class="funnel-stage">
+          <div class="funnel-row">
+            <span class="funnel-name">Reconstruct</span>
+            <span class="funnel-tech">VideoMimic-based</span>
+          </div>
+          <div class="funnel-desc">Cleared clips move into 3D human-and-scene reconstruction — documented in full under <a href="#pipeline">Pipeline</a> above.</div>
+          <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:28%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="acq-callout">
+      <div class="k">The part we keep close</div>
+      <p>We know, before a clip ever reaches reconstruction, whether it's worth reconstructing — on quality, on physical plausibility, and on the provenance tier it deserves. That classifier is the actual product. Everything upstream of it (mining, detection, captioning) is increasingly commodity; everything downstream (reconstruction, retargeting) is a published method plus our own engineering. The filter in the middle is what turns a pile of internet video into something a robotics team can train on without a legal or quality surprise six months later. We're not publishing how it works.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="section-label">03 — Why it matters</p>
+    <h2>Motion capture works. It just doesn't scale.</h2>
+    <p class="lede">Marker suits and capture studios produce excellent ground truth, one person, one session at a time. Most of the motion data a robotics team actually needs already exists, on a phone, on a warehouse camera, on the internet.</p>
+    <div class="compare-img">
+      <img src="assets/mocap_vs_pipeline_en.png" alt="Comparison of traditional motion capture versus this pipeline, on cost and scale">
+    </div>
+  </div>
+</section>
+
+<section id="validation">
+  <div class="wrap">
+    <p class="section-label">04 — Validation</p>
+    <h2>Checked against a published research benchmark.</h2>
+    <p class="lede">The scene-and-human reconstruction stage of this pipeline builds on <a href="https://arxiv.org/abs/2505.03729" target="_blank" rel="noopener">VideoMimic</a> (Allshire, Choi et al., CoRL 2025), a published real-to-sim research method. We re-ran that method's own evaluation protocol — a filtered six-sequence subset of the SLOPER4D dataset, comparing reconstructed human trajectories and scene geometry against real motion-capture-grade ground truth (a 17-IMU mocap suit fused with LiDAR) — the same benchmark VideoMimic's own paper reports against.</p>
+    <p class="lede" style="margin-top:18px;">Everything downstream of reconstruction is ours: the data-acquisition pipeline that gets raw video into that stage reliably, the multi-robot retargeting layer that maps the reconstruction onto a specific humanoid's own joints and dynamics, and the feature-extraction work that turns a reconstructed clip into the structured, queryable record a training system can actually use.</p>
+
+    <table class="bench-table">
+      <thead>
+        <tr><th>Method</th><th>WA-MPJPE (mm)</th><th>W-MPJPE (mm)</th><th>Chamfer Dist. (m)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>WHAM*</td><td>189.29</td><td>1148.49</td><td>—</td></tr>
+        <tr><td>TRAM</td><td>149.48</td><td>954.90</td><td>—</td></tr>
+        <tr class="ours"><td>Our 3D scene reconstruction pipeline (customized from VideoMimic)</td><td>112.13</td><td>696.62</td><td>0.75</td></tr>
+      </tbody>
+    </table>
+    <p class="bench-note">*WHAM does not perform environment reconstruction, so no Chamfer Distance is reported. WHAM and TRAM figures are the original papers' own published numbers, shown as baselines. Our pipeline's figures are our own results from re-running VideoMimic's evaluation protocol (<a href="https://arxiv.org/abs/2505.03729" target="_blank" rel="noopener">arXiv:2505.03729</a>, Table 2 protocol, SLOPER4D filtered subset) — measured by us on this run, not cited from the paper.</p>
+
+    <p class="lede" style="margin-top:48px;">We're extending validation with metrics that matter specifically for <em>robot</em> deployment — not just pose accuracy, but motion smoothness and real-world placement precision:</p>
+    <div class="metric-pending">
+      <span class="metric-chip">MPJPE — in progress</span>
+      <span class="metric-chip">PA-MPJPE — in progress</span>
+      <span class="metric-chip">Global MPJPE — in progress</span>
+      <span class="metric-chip">PCK (150mm) — in progress</span>
+      <span class="metric-chip">Accel / jitter — in progress</span>
+    </div>
+  </div>
+</section>
+
+<section id="status">
+  <div class="wrap">
+    <p class="section-label">05 — Status</p>
+    <h2>What's working today, and what's next.</h2>
+    <div class="status-row">
+      <div class="status-card open">
+        <div class="status-head"><span class="badge open">Available</span><h4>Working today</h4></div>
+        <ul>
+          <li>Video-to-motion-data pipeline, end to end</li>
+          <li>Joint environment + human reconstruction</li>
+          <li>Ground-contact-aware retargeting</li>
+          <li>Unitree G1 joint mapping</li>
+          <li>Benchmark validation against published research</li>
+        </ul>
+      </div>
+      <div class="status-card soon">
+        <div class="status-head"><span class="badge soon">Coming soon</span><h4>In progress</h4></div>
+        <ul>
+          <li>Additional humanoid platform support</li>
+          <li>Object interaction / manipulation data</li>
+          <li>Marker-based mocap cross-validation</li>
+          <li>Public benchmark suite results (3DPW)</li>
+          <li>Source release</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="lede" style="margin-top:48px;">Status above describes this pipeline. Anchor's broader design also grades every episode by provenance:</p>
+    <div class="trust-wrap">
+      <img src="assets/anchor_trust_tiers.png" alt="Anchor's four-tier trust ladder, from verified capture down to labeled synthetic content">
+    </div>
+  </div>
+</section>
+
+<section id="background">
+  <div class="wrap">
+    <p class="section-label">06 — Background</p>
+    <h2>Built on published research, our own retargeting and acquisition layer, and prior video infrastructure work.</h2>
+    <div class="bg-grid">
+      <div>
+        <p>The scene-and-human reconstruction underlying this pipeline builds on <a href="https://arxiv.org/abs/2505.03729" target="_blank" rel="noopener">VideoMimic</a>, a published real-to-sim research method that demonstrated monocular video could be reconstructed into a metrically consistent human-and-environment scene. We use that method for reconstruction only. Everything that turns a reconstruction into usable robot data — the acquisition pipeline that gets arbitrary video into the system reliably, the retargeting layer that maps a single reconstruction onto multiple target humanoids' own joint structures and dynamics, and the feature-extraction stage that produces structured, queryable output — is our own work, built specifically for this purpose.</p>
+        <p>That meant solving problems a research paper doesn't have to: environment setup that survives a clean rebuild, dependency conflicts between components built years apart, GPU memory ceilings that show up only at certain clip lengths, a multi-robot retargeting layer where the original method only ever targeted one, and a deployment-facing dashboard that a non-technical stakeholder can actually run.</p>
+      </div>
+      <div>
+        <div class="credit-box">
+          <div class="k">Research foundation</div>
+          <p>The reconstruction stage builds on <a href="https://arxiv.org/abs/2505.03729" target="_blank" rel="noopener">VideoMimic</a> (CoRL 2025). We did not develop the underlying reconstruction algorithm — our contribution is the data-acquisition pipeline around it, the multi-robot retargeting layer downstream of it, the feature-extraction work on top of it, and the production validation that makes it deployable.</p>
+        </div>
+        <div class="credit-box">
+          <div class="k">Prior experience</div>
+          <p>Our team has spent over a year operating video and image generation infrastructure in production — including AI-driven product photography and video generation pipelines processing real customer traffic at scale. That background, handling video pipelines, GPU infrastructure, and generation-control systems, directly informed how this pipeline was built and hardened.</p>
+        </div>
+        <div class="credit-box">
+          <div class="k">Acquisition lineage</div>
+          <p>We run our own mining pipeline, with a detection and captioning stack built on current-generation multimodal models, plus the quality and provenance classification layer that decides what's worth keeping — the part of Anchor's Trust and Gates stages that are coming soon.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fnote">© HCS Labs — Humanoid Control Systems株式会社</div>
+    <div class="fnote"><a href="https://github.com/hcs-labs/anchor" target="_blank" rel="noopener">This page's source on GitHub</a></div>
+  </div>
+</footer>
+
+</body>
+</html>
