@@ -1,1 +1,1 @@
-# coming soon
+"""Catalog + serving layer."""

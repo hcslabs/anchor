@@ -1,1 +1,1 @@
-# coming soon
+"""Training-shard builder. Interface stub."""

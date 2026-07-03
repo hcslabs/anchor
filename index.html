@@ -344,6 +344,93 @@ footer .fnote a { color: var(--text-faint); }
 .video-tag.sim { background: rgba(38,99,235,0.1); color: var(--accent-bright); }
 .video-tag.real { background: rgba(15,110,86,0.1); color: var(--teal-bright); }
 
+/* ---------- Noise as Signal ---------- */
+.nas-card {
+  background: var(--bg-card); border: 1px solid var(--line); border-radius: 16px;
+  padding: 36px 40px; margin-top: 36px;
+  box-shadow: 0 1px 3px rgba(26,26,26,0.04);
+}
+@media (max-width: 640px) { .nas-card { padding: 24px 20px; } }
+.nas-fig { display: grid; grid-template-columns: 1.35fr 1fr; gap: 36px; align-items: start; }
+@media (max-width: 860px) { .nas-fig { grid-template-columns: 1fr; } }
+.nas-panel h4 {
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--text-dim); margin-bottom: 4px;
+}
+.nas-panel .panel-sub { font-size: 13px; color: var(--text-faint); margin-bottom: 14px; }
+.nas-panel svg { width: 100%; height: auto; display: block; }
+.nas-eq {
+  margin-top: 30px; padding: 18px 24px; border-radius: 12px;
+  background: rgba(38,99,235,0.045); border: 1px solid rgba(38,99,235,0.14);
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 26px;
+}
+.nas-eq .eq {
+  font-family: var(--mono); font-size: 16.5px; color: var(--text); white-space: nowrap;
+}
+.nas-eq .eq .v { color: var(--accent-bright); }
+.nas-eq .eq .n { color: var(--amber-bright); }
+.nas-eq .legend { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+.nas-eq .legend b { font-family: var(--mono); font-weight: 500; }
+.nas-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 26px; }
+@media (max-width: 720px) { .nas-steps { grid-template-columns: 1fr; } }
+.nas-step {
+  border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; background: var(--bg-raised);
+  position: relative;
+}
+.nas-step .num {
+  font-family: var(--mono); font-size: 11px; color: var(--accent); margin-bottom: 6px; display: block;
+}
+.nas-step p { font-size: 13.5px; color: var(--text-dim); line-height: 1.6; }
+.nas-step p b { color: var(--text); font-weight: 600; }
+.nas-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--amber-bright); background: rgba(182,112,30,0.09); border: 1px solid rgba(182,112,30,0.25);
+  padding: 5px 12px; border-radius: 999px; margin-bottom: 16px;
+}
+.nas-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--amber); }
+.nas-foot { margin-top: 26px; font-size: 13.5px; color: var(--text-faint); line-height: 1.7; }
+.nas-foot a { color: var(--accent); }
+
+/* ---------- Equation strips & code blocks (shared) ---------- */
+.eq-strip {
+  margin-top: 30px; padding: 18px 24px; border-radius: 12px;
+  background: rgba(38,99,235,0.045); border: 1px solid rgba(38,99,235,0.14);
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 26px;
+}
+.eq-strip .eq { font-family: var(--mono); font-size: 16px; color: var(--text); white-space: nowrap; }
+.eq-strip .eq .v { color: var(--accent-bright); }
+.eq-strip .eq .n { color: var(--amber-bright); }
+.eq-strip .legend { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+.eq-strip .legend b { font-family: var(--mono); font-weight: 500; }
+.eq-defs { margin-top: 22px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+@media (max-width: 860px) { .eq-defs { grid-template-columns: 1fr; } }
+.eq-def {
+  border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; background: var(--bg-card);
+}
+.eq-def .k { font-family: var(--mono); font-size: 12px; color: var(--accent-bright); margin-bottom: 8px; }
+.eq-def .f { font-family: var(--mono); font-size: 13.5px; color: var(--text); margin-bottom: 8px; }
+.eq-def p { font-size: 12.5px; color: var(--text-faint); line-height: 1.6; }
+.codeblock {
+  margin-top: 26px; border-radius: 12px; overflow: hidden;
+  border: 1px solid rgba(26,34,40,0.9); background: #14181D;
+  box-shadow: 0 2px 12px rgba(20,30,60,0.10);
+}
+.codeblock .cb-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 18px; background: #1A2026; border-bottom: 1px solid rgba(255,255,255,0.06);
+  font-family: var(--mono); font-size: 11.5px; color: #8B95A3; letter-spacing: 0.03em;
+}
+.codeblock .cb-head .lang { color: #5B9BFF; }
+.codeblock pre {
+  margin: 0; padding: 18px 20px; overflow-x: auto;
+  font-family: var(--mono); font-size: 13px; line-height: 1.7; color: #D7DDE5;
+}
+.codeblock .c-kw { color: #7EB6FF; }
+.codeblock .c-str { color: #9ECE9E; }
+.codeblock .c-cm { color: #6B7683; font-style: italic; }
+.codeblock .c-fn { color: #E5C07B; }
+
 </style>
 </head>
 <body>
@@ -356,6 +443,7 @@ footer .fnote a { color: var(--text-faint); }
       <a href="#aegis">Aegis</a>
       <a href="#acquisition">Acquisition</a>
       <a href="#validation">Validation</a>
+      <a href="#noise">Noise</a>
       <a href="#status">Status</a>
       <a href="#background">Background</a>
     </div>
@@ -412,6 +500,11 @@ footer .fnote a { color: var(--text-faint); }
       <img src="assets/anchor_acquisition_figure.png" alt="Anchor pipeline diagram: candidate sources are mined and detected, then captioned by a vision-language model. From there the pipeline branches in two: a trust-and-gates classifier (shown withheld) scores each clip before 3D reconstruction and motion retargeting, while a parallel scene-and-task classifier tags task type, location, and risk level, feeding HCS Labs' Aegis predictive safety system. Reconstructed motion is retargeted onto a target robot's kinematics and packaged as robot-ready output across multiple humanoid platforms.">
     </div>
     <p class="fig-caption">End-to-end view of the pipeline above. The dashed, hatched stages are where our actual method lives — what's shown is the shape of the problem, not how we solve it. The same scene-understanding layer that feeds reconstruction also tags task, location, and risk — that branch feeds Aegis, our separate predictive safety system.</p>
+
+    <div class="eq-strip">
+      <span class="eq"><span class="v">θ*</span> = argmin<sub>θ</sub> <span class="n">ε</span>(θ),&nbsp;&nbsp;θ = (θ<sub>scope</sub>, θ<sub>proc</sub>)</span>
+      <span class="legend">The whole pipeline is run as a <b>closed loop</b>: every acquisition choice (θ<sub>scope</sub> — task, condition, place) and every preprocessing choice (θ<sub>proc</sub> — retargeting, filtering, scoring thresholds) is a tunable parameter, and <b>ε</b> is the measured gap between a lightweight dynamics model trained on the round's data and the real robot executing the same task. The gap feeds back; θ updates; the next round's data gets closer. Once ε converges, θ* generates the production dataset — and is reused for every future task in that class.</span>
+    </div>
   </div>
 </section>
 
@@ -492,6 +585,9 @@ footer .fnote a { color: var(--text-faint); }
           <span class="video-tag real">Real world</span>
           <span>Same model, running on real street footage</span>
         </div>
+        <div class="video-card-foot" style="border-top:none; padding-top:0;">
+          <span>Source footage: <a href="https://youtu.be/ScRetH9wxPk" target="_blank" rel="noopener">YouTube</a></span>
+        </div>
       </div>
     </div>
   </div>
@@ -556,6 +652,27 @@ footer .fnote a { color: var(--text-faint); }
       <div class="k">The part we keep close</div>
       <p>We know, before a clip ever reaches reconstruction, whether it's worth reconstructing — on quality, on physical plausibility, and on the provenance tier it deserves. That classifier is the actual product. Everything upstream of it (mining, detection, captioning) is increasingly commodity; everything downstream (reconstruction, retargeting) is a published method plus our own engineering. The filter in the middle is what turns a pile of internet video into something a robotics team can train on without a legal or quality surprise six months later. We're not publishing how it works.</p>
     </div>
+
+    <p class="lede" style="margin-top:48px;">The acquisition layer's <em>interfaces</em> are public, as working code, in <a href="https://github.com/hcslabs/anchor/tree/main/pipeline">the pipeline SDK</a>. A scout is handed a scope — task, conditions, place — and returns license-recorded candidates; the scope object is θ<sub>scope</sub>, the same parameters the closed loop tunes:</p>
+
+    <div class="codeblock">
+      <div class="cb-head"><span><span class="lang">python</span> — anchor.ingest.scout &nbsp;·&nbsp; runs today, <code style="color:#8B95A3">pip install -e ".[ingest]"</code></span><span>examples/01_scout_licensed_sources.py</span></div>
+      <pre><span class="c-kw">from</span> anchor.ingest.scout <span class="c-kw">import</span> Scope, PexelsVideoConnector
+<span class="c-kw">from</span> anchor.ingest <span class="c-kw">import</span> ingest
+<span class="c-kw">from</span> anchor.quality <span class="c-kw">import</span> GateCascade, default_open_gates
+
+scope = <span class="c-fn">Scope</span>(                                    <span class="c-cm"># ← this object *is* θ_scope</span>
+    task_class=<span class="c-str">"box_carry"</span>,
+    query_terms=(<span class="c-str">"person carrying box warehouse"</span>, <span class="c-str">"worker lifting package"</span>),
+    min_duration_s=<span class="c-str">3.0</span>, min_height_px=<span class="c-str">720</span>, max_candidates=<span class="c-str">50</span>,
+)
+
+cascade = <span class="c-fn">GateCascade</span>(<span class="c-fn">default_open_gates</span>())        <span class="c-cm"># thresholds are θ_proc</span>
+<span class="c-kw">for</span> cand <span class="c-kw">in</span> <span class="c-fn">PexelsVideoConnector</span>().search(scope):  <span class="c-cm"># licensed API, license recorded at birth</span>
+    ep = <span class="c-fn">ingest</span>(download(cand.uri), source_uri=cand.uri)
+    <span class="c-kw">if</span> cascade.run(<span class="c-fn">probe</span>(ep), ep):                <span class="c-cm"># cheap gates first; rejects are logged, kept</span>
+        enqueue_for_enrichment(ep)                <span class="c-cm"># → Trust → Enrich → Retarget</span></pre>
+    </div>
   </div>
 </section>
 
@@ -589,6 +706,24 @@ footer .fnote a { color: var(--text-faint); }
     </table>
     <p class="bench-note">*WHAM does not perform environment reconstruction, so no Chamfer Distance is reported. WHAM and TRAM figures are the original papers' own published numbers, shown as baselines. Our pipeline's figures are our own results from re-running VideoMimic's evaluation protocol (<a href="https://arxiv.org/abs/2505.03729" target="_blank" rel="noopener">arXiv:2505.03729</a>, Table 2 protocol, SLOPER4D filtered subset) — measured by us on this run, not cited from the paper.</p>
 
+    <div class="eq-defs">
+      <div class="eq-def">
+        <div class="k">MPJPE — joint position error</div>
+        <div class="f">1/TJ · Σ<sub>t,j</sub> ‖q̂<sub>t,j</sub> − q<sub>t,j</sub>‖₂</div>
+        <p>Mean Euclidean distance between estimated and ground-truth 3D joint positions, in millimetres, over all frames T and joints J.</p>
+      </div>
+      <div class="eq-def">
+        <div class="k">W- / WA- — world-frame variants</div>
+        <div class="f">W: one global alignment · WA: per-100-frame windows</div>
+        <p>Both keep the estimate in the <em>world</em> frame — global translation drift counts against you — which is what matters for robot placement, not just pose shape.</p>
+      </div>
+      <div class="eq-def">
+        <div class="k">Chamfer distance — scene geometry</div>
+        <div class="f">mean<sub>p∈P</sub> min<sub>q∈Q</sub>‖p−q‖ + mean<sub>q∈Q</sub> min<sub>p∈P</sub>‖q−p‖</div>
+        <p>Symmetric nearest-neighbour distance between the reconstructed environment point cloud and the LiDAR ground truth, in metres.</p>
+      </div>
+    </div>
+
     <p class="lede" style="margin-top:48px;">We're extending validation with metrics that matter specifically for <em>robot</em> deployment — not just pose accuracy, but motion smoothness and real-world placement precision:</p>
     <div class="metric-pending">
       <span class="metric-chip">MPJPE — in progress</span>
@@ -596,6 +731,92 @@ footer .fnote a { color: var(--text-faint); }
       <span class="metric-chip">Global MPJPE — in progress</span>
       <span class="metric-chip">PCK (150mm) — in progress</span>
       <span class="metric-chip">Accel / jitter — in progress</span>
+    </div>
+  </div>
+</section>
+
+<section id="noise">
+  <div class="wrap">
+    <p class="section-label">04.5 — Research direction</p>
+    <h2>Noise as signal: the error between video and mocap is itself training data.</h2>
+    <p class="lede">Every validation row above measures the same thing: the residual between what our video pipeline reconstructs and what a mocap rig recorded. The standard move is to treat that residual as a defect to be minimized. We take the opposite approach: this residual is a <em>structured, task-conditioned noise distribution</em>, and injecting it during policy training acts as a regularizer that improves sim-to-real transfer — in the same family as domain randomization and noisy-student training.</p>
+
+    <div class="nas-card">
+      <span class="nas-badge">Research — under internal validation</span>
+      <div class="nas-fig">
+        <div class="nas-panel">
+          <h4>A — The residual is structured, not white</h4>
+          <p class="panel-sub">Same motion, two measurements. The gap ε(t) between them tracks pose, contact, and occlusion — it is not i.i.d. Gaussian.</p>
+          <svg viewBox="0 0 520 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two overlapping joint-position traces: mocap ground truth and the video estimate. The shaded band between them is the residual epsilon of t, which varies with the motion.">
+            <!-- axes -->
+            <line x1="42" y1="200" x2="500" y2="200" stroke="#C7CEDB" stroke-width="1.5"/>
+            <line x1="42" y1="200" x2="42" y2="24" stroke="#C7CEDB" stroke-width="1.5"/>
+            <text x="500" y="218" font-family="DM Mono, monospace" font-size="11" fill="#6B7280" text-anchor="end">t</text>
+            <text x="30" y="30" font-family="DM Mono, monospace" font-size="11" fill="#6B7280" text-anchor="end">q(t)</text>
+            <!-- residual band (between the two curves) -->
+            <path d="M 50 150
+                     C 95 96, 140 60, 185 74
+                     C 230 88, 268 140, 316 148
+                     C 364 156, 420 108, 492 118
+                     L 492 132
+                     C 420 124, 368 174, 318 166
+                     C 268 158, 232 100, 187 88
+                     C 142 76, 97 112, 50 162 Z"
+                  fill="rgba(182,112,30,0.16)"/>
+            <!-- mocap curve (ground truth) -->
+            <path d="M 50 150 C 95 96, 140 60, 185 74 C 230 88, 268 140, 316 148 C 364 156, 420 108, 492 118"
+                  fill="none" stroke="#2663EB" stroke-width="2.6" stroke-linecap="round"/>
+            <!-- video estimate curve -->
+            <path d="M 50 162 C 97 112, 142 76, 187 88 C 232 100, 268 158, 318 166 C 368 174, 420 124, 492 132"
+                  fill="none" stroke="#0F6E56" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="7 5"/>
+            <!-- epsilon callout -->
+            <line x1="255" y1="118" x2="255" y2="136" stroke="#B6701E" stroke-width="1.8"/>
+            <line x1="250" y1="118" x2="260" y2="118" stroke="#B6701E" stroke-width="1.8"/>
+            <line x1="250" y1="136" x2="260" y2="136" stroke="#B6701E" stroke-width="1.8"/>
+            <text x="266" y="122" font-family="DM Mono, monospace" font-size="13" fill="#8A5300">ε(t)</text>
+            <!-- legend -->
+            <line x1="56" y1="228" x2="80" y2="228" stroke="#2663EB" stroke-width="2.6"/>
+            <text x="86" y="232" font-family="DM Mono, monospace" font-size="11.5" fill="#425466">mocap  q_m</text>
+            <line x1="196" y1="228" x2="220" y2="228" stroke="#0F6E56" stroke-width="2.4" stroke-dasharray="7 5"/>
+            <text x="226" y="232" font-family="DM Mono, monospace" font-size="11.5" fill="#425466">video  q̂_v</text>
+            <rect x="342" y="222" width="16" height="10" fill="rgba(182,112,30,0.3)"/>
+            <text x="364" y="232" font-family="DM Mono, monospace" font-size="11.5" fill="#425466">residual ε</text>
+          </svg>
+        </div>
+        <div class="nas-panel">
+          <h4>B — Injected noise helps, then hurts</h4>
+          <p class="panel-sub">Sweep the injection scale λ; transfer performance is non-monotonic. The optimum λ* is what we are estimating per task class.</p>
+          <svg viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Inverted-U curve of sim-to-real transfer performance versus injected noise scale lambda, with an optimum marked at lambda star.">
+            <line x1="40" y1="200" x2="386" y2="200" stroke="#C7CEDB" stroke-width="1.5"/>
+            <line x1="40" y1="200" x2="40" y2="24" stroke="#C7CEDB" stroke-width="1.5"/>
+            <text x="386" y="218" font-family="DM Mono, monospace" font-size="11" fill="#6B7280" text-anchor="end">λ (noise scale)</text>
+            <text x="34" y="30" font-family="DM Mono, monospace" font-size="11" fill="#6B7280" text-anchor="end" transform="rotate(0)">transfer</text>
+            <!-- inverted U as polyline of small segments -->
+            <path d="M 52 182 C 110 70, 168 40, 206 38 C 250 40, 300 64, 368 176"
+                  fill="none" stroke="#0F6E56" stroke-width="2.8" stroke-linecap="round"/>
+            <!-- baseline: no-noise dashed reference -->
+            <line x1="40" y1="182" x2="386" y2="182" stroke="#9CA3AF" stroke-width="1.2" stroke-dasharray="4 5"/>
+            <text x="382" y="176" font-family="DM Mono, monospace" font-size="10.5" fill="#9CA3AF" text-anchor="end">λ=0 baseline</text>
+            <!-- optimum -->
+            <circle cx="206" cy="38" r="5.5" fill="#0F6E56" stroke="#FFFFFF" stroke-width="2"/>
+            <line x1="206" y1="46" x2="206" y2="200" stroke="#0F6E56" stroke-width="1" stroke-dasharray="3 4" opacity="0.5"/>
+            <text x="206" y="218" font-family="DM Mono, monospace" font-size="12" fill="#0B5743" text-anchor="middle">λ*</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="nas-eq">
+        <span class="eq">q̃(t) = q_m(t) + λ·<span class="n">ε′</span>(t),&nbsp;&nbsp;<span class="n">ε′</span> ~ <span class="v">D̂</span><sub>task</sub></span>
+        <span class="legend">Train the policy on mocap-clean trajectories perturbed by noise <b>sampled from the empirical residual distribution D̂</b> — fit from paired (mocap, video) recordings of the same motions — rather than from a synthetic Gaussian. λ follows a curriculum and is annealed against validation transfer.</span>
+      </div>
+
+      <div class="nas-steps">
+        <div class="nas-step"><span class="num">01 — PAIR</span><p><b>Record the same motions twice</b> — once through a mocap rig, once through the video pipeline — so every frame has a measured residual, aligned in time.</p></div>
+        <div class="nas-step"><span class="num">02 — FIT</span><p><b>Fit the empirical residual distribution D̂</b> per joint and per task class, preserving its temporal correlation — block-bootstrap sampling, not per-frame i.i.d. draws.</p></div>
+        <div class="nas-step"><span class="num">03 — INJECT</span><p><b>Inject ε′ ~ D̂ during policy training</b> at curriculum scale λ, and select λ* on held-out sim-to-real transfer — the inverted-U in panel B.</p></div>
+      </div>
+
+      <p class="nas-foot">Why this works: domain randomization (OpenAI, 2017–19) and noisy-student training (Xie et al., 2020) both established that the <em>right kind</em> of injected uncertainty regularizes a model into robustness. Our approach is narrower and directly measurable: the residual between video-based pose estimation and mocap is a better-matched noise model for humanoid policies than synthetic perturbations, precisely because it is generated by the same estimator the deployed system will see. Results are being validated internally, and the method plugs into Anchor as one more tunable element of the preprocessing parameter set θ_proc. A sampler skeleton is public in <a href="https://github.com/hcslabs/anchor/tree/main/pipeline">the pipeline SDK</a> (<span style="font-family:var(--mono); font-size:12.5px;">anchor.noise.residual</span>).</p>
     </div>
   </div>
 </section>
@@ -664,7 +885,7 @@ footer .fnote a { color: var(--text-faint); }
 <footer>
   <div class="wrap">
     <div class="fnote">© HCS Labs — Humanoid Control Systems株式会社</div>
-    <div class="fnote"><a href="https://github.com/hcs-labs/anchor" target="_blank" rel="noopener">This page's source on GitHub</a></div>
+    <div class="fnote"><a href="https://github.com/hcslabs/anchor" target="_blank" rel="noopener">This page's source on GitHub</a></div>
   </div>
 </footer>
 

@@ -1,1 +1,1 @@
-# coming soon
+"""Episode catalog index. Interface stub."""

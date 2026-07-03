@@ -4,63 +4,62 @@
 that turns ordinary human video into provenance-verified, feasibility-checked,
 robot-ready training data.
 
-This repository hosts the public project page and credits for the published
-research Anchor's reconstruction stage builds on. The pipeline implementation
-itself is closed for now — see [`pipeline/`](pipeline) for what that means and
-what's planned.
+**Project page:** https://hcslabs.github.io/anchor/
 
----
+```
+Intake → Trust → Gates → Enrich → Retarget → Package → Serve
+```
 
-## Acquisition & Reconstruction Pipeline
-
-![Anchor acquisition and reconstruction pipeline overview](assets/anchor_acquisition_figure.png)
-
-Raw video goes through detection, captioning, and trust-gating before 3D reconstruction and robot-specific retargeting. The same intake that produces training data also tags task type, location, and risk — feeding **Aegis**, our predictive safety system.
-
----
-
-## Aegis — Predictive Safety Monitor
-
-Anchor's intake doesn't just produce training data. Every clip that clears the pipeline has already been scene-understood — what task is happening, where, and how risky it is. That second branch is what **Aegis**, our world-model-based predictive safety system, runs on.
-
-Aegis predicts a robot's likely future states across multiple time horizons (0.1s to 5s out), scores the trajectory, and proposes corrective action before a fault occurs — rather than stopping after one.
-
-**In simulation** — world-model prediction running on a simulated scene:
-
-https://github.com/user-attachments/assets/64e8937c-7a43-4a90-a8fb-40b29fb82590
-
-**In the real world** — same model, running on real street footage:
-
-https://github.com/user-attachments/assets/bdae5cb5-3c55-4ed0-a886-326ff0ab74b4
-
----
-
-## What's here
+## What's in this repo
 
 ```
 index.html      the project page (no build step — just open it)
-assets/         diagrams, validation imagery, and demo video clips
-third_party/    credits for VideoMimic real2sim and Video-LLaMA
-pipeline/       placeholder for the pipeline source — closed for now
+assets/         diagrams, validation imagery, demo video clips
+pipeline/       the pipeline SDK — open stages as working code, closed
+                stages as interface stubs. Start at pipeline/README.md
+third_party/    credits for the published / open-source work the
+                reconstruction and intake stages build on
 ```
 
-## Live page
+## The SDK, in one breath
 
-**[hcslabs.github.io/anchor](https://hcslabs.github.io/anchor/)**
+```bash
+cd pipeline && pip install -e ".[ingest]"
+anchor probe clip.mp4      # probed + content-addressed episode record
+anchor gates clip.mp4      # open quality-gate cascade verdict
+anchor stages              # the seven stages, open vs closed
+```
 
----
+Working code in the SDK today: scoped **source connectors** (licensed-API
+acquisition, local/partner drops), **ffprobe intake** with content addressing,
+the **quality-gate cascade** (open tier), **CLIP-based prompt-driven person
+segmentation**, and the **Noise-as-Signal residual sampler** —
+plus four runnable [examples](pipeline/examples). See
+[`pipeline/README.md`](pipeline/README.md) for the full module map and the
+honest open/closed table.
 
-## Status
+## Noise as Signal
 
-Internal validation in progress. The page covers:
+New on the page (**§04.5**): our research direction treating the residual
+between video-based pose estimation and mocap as a *structured, task-
+conditioned noise distribution* — and injecting it during policy training as
+a regularizer for sim-to-real transfer. Results are being validated
+internally; a public sampler skeleton lives in `anchor.noise`.
 
-- Acquisition, reconstruction, and retargeting pipeline overview
-- Validation against the published VideoMimic benchmark (SLOPER4D subset),
-  re-run by us — see the page for what's our measurement vs. cited
-- How the intake feeds both training data output and Aegis safety evaluation
-- Trust-tier design (Intake → Trust → Gates → Enrich → Retarget → Package → Serve),
-  with an honest accounting of what's validated, partially validated, and in development
+## Validation
+
+The reconstruction stage builds on [VideoMimic](https://arxiv.org/abs/2505.03729)
+(CoRL 2025); we re-ran its own evaluation protocol (SLOPER4D filtered subset)
+and report our measured numbers on the page — clearly separated from cited
+baselines. Everything downstream of reconstruction — acquisition, multi-robot
+retargeting, feature extraction — is our own work.
+
+## What's deliberately withheld
+
+The Trust + Gates classification logic and the retargeting correspondence /
+shape-fitting method. Diagrams mark these with dashed borders and a lock;
+code marks them with interface stubs that raise `NotImplementedError`.
 
 ## Ownership
 
-© HCS Labs — Humanoid Control Systems株式会社.
+© HCS Labs — Humanoid Control Systems株式会社. All rights reserved.

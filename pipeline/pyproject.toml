@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "anchor-pipeline"
+version = "0.3.0a0"
+description = "Anchor — a trust-graded data refinery for humanoid robot learning. Video in, provenance-verified robot-ready training data out."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Proprietary — all rights reserved. See README." }
+authors = [{ name = "HCS Labs — Humanoid Control Systems K.K." }]
+keywords = ["robotics", "humanoid", "imitation-learning", "sim2real", "data-pipeline"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+  "numpy>=1.24",
+]
+
+[project.optional-dependencies]
+# Each stage pulls its own heavy deps only when you actually use it.
+ingest = ["requests>=2.31"]
+segment = ["torch>=2.1", "transformers>=4.40", "pillow>=10.0", "opencv-python-headless>=4.9"]
+noise = ["scipy>=1.11"]
+all = ["anchor-pipeline[ingest,segment,noise]"]
+
+[project.scripts]
+anchor = "anchor.cli:main"
+
+[project.urls]
+Homepage = "https://hcslabs.github.io/anchor/"
+Repository = "https://github.com/hcslabs/anchor"
+
+[tool.setuptools.packages.find]
+where = ["src"]

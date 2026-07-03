@@ -1,1 +1,1 @@
-# coming soon
+"""Hand pose enrichment. Interface stub."""
