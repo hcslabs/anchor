@@ -60,6 +60,12 @@ The Trust + Gates classification logic and the retargeting correspondence /
 shape-fitting method. Diagrams mark these with dashed borders and a lock;
 code marks them with interface stubs that raise `NotImplementedError`.
 
+## Contact
+
+Questions about Anchor, research collaborations, licensing, or commercial partnerships are welcome.
+
+**Email:** contact@hcslabs.ai
+
 ## Ownership
 
 © HCS Labs — Humanoid Control Systems株式会社. All rights reserved.
