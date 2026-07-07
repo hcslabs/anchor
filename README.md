@@ -62,4 +62,10 @@ code marks them with interface stubs that raise `NotImplementedError`.
 
 ## Ownership
 
+## Contact
+
+Questions about Anchor, research collaborations, licensing, or commercial partnerships are welcome.
+
+**Email:** contact@hcslabs.ai
+
 © HCS Labs — Humanoid Control Systems株式会社. All rights reserved.
