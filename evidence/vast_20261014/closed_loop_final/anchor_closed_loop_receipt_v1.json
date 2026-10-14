@@ -1,0 +1,765 @@
+{
+  "schema_version": 1,
+  "kind": "anchor_closed_loop_receipt_v1",
+  "created_at": "2026-10-14T11:56:34.033709+00:00",
+  "execution_scope": "simulation_and_non_actuating_validation_only",
+  "physical_robot_commands_sent": false,
+  "agent_policy": "bounded_recipe_search_with_hard_quality_gates",
+  "state_transitions": [
+    "human_video_ingested",
+    "fixed_rate_pose_extracted",
+    "embodiment_recipes_evaluated",
+    "technical_quality_gated",
+    "candidate_selected",
+    "khi_artifacts_emitted",
+    "physics_feedback_interpreted"
+  ],
+  "embodiment": {
+    "profile_path": "/workspace/anchor-khi-closed-loop-20261014/integrations/khi_g1/unitree_g1_29dof.embodiment.json",
+    "profile_sha256": "94919e03ce145bbd3ea336c2163ef222b987639ad5a1741f33d4959068e5b93b",
+    "urdf_path": "/workspace/anchor-khi-closed-loop-20261014/khi_source/g1_29dof_pc2.urdf",
+    "urdf_sha256": "05c644bbf64ddea02c701f07c636c643930690a7072eaa38157ac7b362109011",
+    "motion_profile": "khi_tabletop_right"
+  },
+  "candidates": [
+    {
+      "video_path": "/workspace/anchor-khi-closed-loop-20261014/inputs/videos/GRAB_official_lateral_offset_reach_grasp_lift_phone.mp4",
+      "video_sha256": "73706d15a156087570a7db49b8a319cc12e9885c0f02c15e494a6d122689a460",
+      "human_motion_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/candidate_01_GRAB_official_lateral_offset_reach_grasp_lift_phone/human_motion_v1.json",
+      "human_motion_sha256": "041d7b0a932b58602b6549cd8a032f9d726d24813e15425c49943e4f16354d6e",
+      "human_quality": {
+        "decoded_frame_count": 53,
+        "detected_frame_count": 53,
+        "interpolated_frame_count": 0,
+        "emitted_frame_count": 53,
+        "dropped_leading_frame_count": 0,
+        "dropped_trailing_frame_count": 0,
+        "detection_ratio": 1.0,
+        "mean_visibility": 0.8819494089521702,
+        "uniform_timeline_preserved": true,
+        "screening_only": true
+      },
+      "attempts": [
+        {
+          "recipe": "balanced",
+          "settings": {
+            "damping": 0.015,
+            "posture_weight": 0.001,
+            "continuity_weight": 0.005,
+            "maximum_iterations": 80,
+            "maximum_step_rad": 0.16,
+            "joint_limit_margin_rad": 0.02,
+            "convergence_m": 0.004
+          },
+          "trajectory_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/candidate_01_GRAB_official_lateral_offset_reach_grasp_lift_phone/trajectory_balanced.json",
+          "trajectory_sha256": "bd0c2526cdacd3a6057af20bd0043983bb8d5ffc6bf4fae6f8fb157cbf3fb331",
+          "quality": {
+            "frame_count": 53,
+            "mean_marker_rmse_m": 0.009485306188809856,
+            "maximum_marker_rmse_m": 0.02279279973044657,
+            "maximum_joint_velocity_rad_s": 2.8516152335000005,
+            "mean_joint_velocity_rad_s": 0.07962094494529177,
+            "maximum_joint_acceleration_rad_s2": 22.142860530000004,
+            "maximum_joint_velocity_limit_ratio": 0.0770706819864865,
+            "all_joint_limits_satisfied": true,
+            "all_velocity_limits_satisfied": true
+          },
+          "gate": {
+            "passed": true,
+            "checks": {
+              "detection_ratio": true,
+              "frame_count": true,
+              "mean_marker_rmse": true,
+              "maximum_marker_rmse": true,
+              "joint_limits": true,
+              "velocity_limits": true,
+              "uniform_timeline": true,
+              "no_premade_robot_motion": true
+            },
+            "failed_checks": [],
+            "score": 0.01533764748539447,
+            "thresholds": {
+              "minimum_detection_ratio": 0.35,
+              "minimum_frame_count": 5,
+              "maximum_mean_marker_rmse_m": 0.02,
+              "maximum_marker_rmse_m": 0.05,
+              "maximum_velocity_limit_ratio": 1.0
+            }
+          }
+        },
+        {
+          "recipe": "stability_first",
+          "settings": {
+            "damping": 0.025,
+            "posture_weight": 0.001,
+            "continuity_weight": 0.012,
+            "maximum_iterations": 100,
+            "maximum_step_rad": 0.12,
+            "joint_limit_margin_rad": 0.02,
+            "convergence_m": 0.004
+          },
+          "trajectory_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/candidate_01_GRAB_official_lateral_offset_reach_grasp_lift_phone/trajectory_stability_first.json",
+          "trajectory_sha256": "bd0ef7cedca889335024f4a808e1559eb89a53e6bd4d8ea69e7c5b74fc2b2587",
+          "quality": {
+            "frame_count": 53,
+            "mean_marker_rmse_m": 0.01063055986263775,
+            "maximum_marker_rmse_m": 0.03052289163991694,
+            "maximum_joint_velocity_rad_s": 2.3236224694999996,
+            "mean_joint_velocity_rad_s": 0.07480431165683024,
+            "maximum_joint_acceleration_rad_s2": 18.607195442499997,
+            "maximum_joint_velocity_limit_ratio": 0.06280060728378377,
+            "all_joint_limits_satisfied": true,
+            "all_velocity_limits_satisfied": true
+          },
+          "gate": {
+            "passed": true,
+            "checks": {
+              "detection_ratio": true,
+              "frame_count": true,
+              "mean_marker_rmse": true,
+              "maximum_marker_rmse": true,
+              "joint_limits": true,
+              "velocity_limits": true,
+              "uniform_timeline": true,
+              "no_premade_robot_motion": true
+            },
+            "failed_checks": [],
+            "score": 0.018386883987184553,
+            "thresholds": {
+              "minimum_detection_ratio": 0.35,
+              "minimum_frame_count": 5,
+              "maximum_mean_marker_rmse_m": 0.02,
+              "maximum_marker_rmse_m": 0.05,
+              "maximum_velocity_limit_ratio": 1.0
+            }
+          }
+        },
+        {
+          "recipe": "fit_first",
+          "settings": {
+            "damping": 0.012,
+            "posture_weight": 0.0005,
+            "continuity_weight": 0.006,
+            "maximum_iterations": 140,
+            "maximum_step_rad": 0.14,
+            "joint_limit_margin_rad": 0.02,
+            "convergence_m": 0.004
+          },
+          "trajectory_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/candidate_01_GRAB_official_lateral_offset_reach_grasp_lift_phone/trajectory_fit_first.json",
+          "trajectory_sha256": "6ad615e229c1e5632872b9cad86b47585494c46eeddd0c812ed6a7ea273da08e",
+          "quality": {
+            "frame_count": 53,
+            "mean_marker_rmse_m": 0.009348302112259068,
+            "maximum_marker_rmse_m": 0.02342378019002009,
+            "maximum_joint_velocity_rad_s": 2.777527581,
+            "mean_joint_velocity_rad_s": 0.08069452315484085,
+            "maximum_joint_acceleration_rad_s2": 21.9512501675,
+            "maximum_joint_velocity_limit_ratio": 0.07506831300000001,
+            "all_joint_limits_satisfied": true,
+            "all_velocity_limits_satisfied": true
+          },
+          "gate": {
+            "passed": true,
+            "checks": {
+              "detection_ratio": true,
+              "frame_count": true,
+              "mean_marker_rmse": true,
+              "maximum_marker_rmse": true,
+              "joint_limits": true,
+              "velocity_limits": true,
+              "uniform_timeline": true,
+              "no_premade_robot_motion": true
+            },
+            "failed_checks": [],
+            "score": 0.015354383785764092,
+            "thresholds": {
+              "minimum_detection_ratio": 0.35,
+              "minimum_frame_count": 5,
+              "maximum_mean_marker_rmse_m": 0.02,
+              "maximum_marker_rmse_m": 0.05,
+              "maximum_velocity_limit_ratio": 1.0
+            }
+          }
+        }
+      ],
+      "selected_recipe": "balanced",
+      "selected_trajectory_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/candidate_01_GRAB_official_lateral_offset_reach_grasp_lift_phone/trajectory_balanced.json",
+      "selected_trajectory_sha256": "bd0c2526cdacd3a6057af20bd0043983bb8d5ffc6bf4fae6f8fb157cbf3fb331",
+      "passed": true,
+      "selection_score": 0.01533764748539447
+    },
+    {
+      "video_path": "/workspace/anchor-khi-closed-loop-20261014/inputs/videos/KIT_FruitBars_FullBody_Side_Grasp.mp4",
+      "video_sha256": "16f0c9c2fae464d1191b36a8ee04e9f0099e02da7e89a88a599bed364547e4e0",
+      "human_motion_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/candidate_02_KIT_FruitBars_FullBody_Side_Grasp/human_motion_v1.json",
+      "human_motion_sha256": "0651f291f57024eb6f9bb9015a28c7f64903d3be9583758162b4ff40081aaee7",
+      "human_quality": {
+        "decoded_frame_count": 40,
+        "detected_frame_count": 27,
+        "interpolated_frame_count": 13,
+        "emitted_frame_count": 40,
+        "dropped_leading_frame_count": 0,
+        "dropped_trailing_frame_count": 0,
+        "detection_ratio": 0.675,
+        "mean_visibility": 0.6425836760162686,
+        "uniform_timeline_preserved": true,
+        "screening_only": true
+      },
+      "attempts": [
+        {
+          "recipe": "balanced",
+          "settings": {
+            "damping": 0.015,
+            "posture_weight": 0.001,
+            "continuity_weight": 0.005,
+            "maximum_iterations": 80,
+            "maximum_step_rad": 0.16,
+            "joint_limit_margin_rad": 0.02,
+            "convergence_m": 0.004
+          },
+          "trajectory_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/candidate_02_KIT_FruitBars_FullBody_Side_Grasp/trajectory_balanced.json",
+          "trajectory_sha256": "b951ad7608961bdb0427ce14bf19bcf100ec6ddc3c2200f656cd3e947a96a87c",
+          "quality": {
+            "frame_count": 40,
+            "mean_marker_rmse_m": 0.011162196279003483,
+            "maximum_marker_rmse_m": 0.03354416897413029,
+            "maximum_joint_velocity_rad_s": 3.7340019895000003,
+            "mean_joint_velocity_rad_s": 0.09805745782493369,
+            "maximum_joint_acceleration_rad_s2": 24.4494807025,
+            "maximum_joint_velocity_limit_ratio": 0.1009189726891892,
+            "all_joint_limits_satisfied": true,
+            "all_velocity_limits_satisfied": true
+          },
+          "gate": {
+            "passed": true,
+            "checks": {
+              "detection_ratio": true,
+              "frame_count": true,
+              "mean_marker_rmse": true,
+              "maximum_marker_rmse": true,
+              "joint_limits": true,
+              "velocity_limits": true,
+              "uniform_timeline": true,
+              "no_premade_robot_motion": true
+            },
+            "failed_checks": [],
+            "score": 0.036000076467914435,
+            "thresholds": {
+              "minimum_detection_ratio": 0.35,
+              "minimum_frame_count": 5,
+              "maximum_mean_marker_rmse_m": 0.02,
+              "maximum_marker_rmse_m": 0.05,
+              "maximum_velocity_limit_ratio": 1.0
+            }
+          }
+        },
+        {
+          "recipe": "stability_first",
+          "settings": {
+            "damping": 0.025,
+            "posture_weight": 0.001,
+            "continuity_weight": 0.012,
+            "maximum_iterations": 100,
+            "maximum_step_rad": 0.12,
+            "joint_limit_margin_rad": 0.02,
+            "convergence_m": 0.004
+          },
+          "trajectory_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/candidate_02_KIT_FruitBars_FullBody_Side_Grasp/trajectory_stability_first.json",
+          "trajectory_sha256": "333987f92b0a120becd2a4395fc49c7e968d1f863fcbab4ec034aed3fdeca1dd",
+          "quality": {
+            "frame_count": 40,
+            "mean_marker_rmse_m": 0.01279431481426373,
+            "maximum_marker_rmse_m": 0.049338888807474036,
+            "maximum_joint_velocity_rad_s": 3.2861768515,
+            "mean_joint_velocity_rad_s": 0.09138697328824051,
+            "maximum_joint_acceleration_rad_s2": 21.154645835,
+            "maximum_joint_velocity_limit_ratio": 0.08881559058108109,
+            "all_joint_limits_satisfied": true,
+            "all_velocity_limits_satisfied": true
+          },
+          "gate": {
+            "passed": true,
+            "checks": {
+              "detection_ratio": true,
+              "frame_count": true,
+              "mean_marker_rmse": true,
+              "maximum_marker_rmse": true,
+              "joint_limits": true,
+              "velocity_limits": true,
+              "uniform_timeline": true,
+              "no_premade_robot_motion": true
+            },
+            "failed_checks": [],
+            "score": 0.0415566681972944,
+            "thresholds": {
+              "minimum_detection_ratio": 0.35,
+              "minimum_frame_count": 5,
+              "maximum_mean_marker_rmse_m": 0.02,
+              "maximum_marker_rmse_m": 0.05,
+              "maximum_velocity_limit_ratio": 1.0
+            }
+          }
+        },
+        {
+          "recipe": "fit_first",
+          "settings": {
+            "damping": 0.012,
+            "posture_weight": 0.0005,
+            "continuity_weight": 0.006,
+            "maximum_iterations": 140,
+            "maximum_step_rad": 0.14,
+            "joint_limit_margin_rad": 0.02,
+            "convergence_m": 0.004
+          },
+          "trajectory_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/candidate_02_KIT_FruitBars_FullBody_Side_Grasp/trajectory_fit_first.json",
+          "trajectory_sha256": "a75a6a424fc1cbc72cb5a142d51cc0f232292047204ddabd2c5f16c55e204cf3",
+          "quality": {
+            "frame_count": 40,
+            "mean_marker_rmse_m": 0.010461807426704469,
+            "maximum_marker_rmse_m": 0.029490347898406623,
+            "maximum_joint_velocity_rad_s": 3.6070410034999996,
+            "mean_joint_velocity_rad_s": 0.09767418366047746,
+            "maximum_joint_acceleration_rad_s2": 24.543335337499997,
+            "maximum_joint_velocity_limit_ratio": 0.09748759468918917,
+            "all_joint_limits_satisfied": true,
+            "all_velocity_limits_satisfied": true
+          },
+          "gate": {
+            "passed": true,
+            "checks": {
+              "detection_ratio": true,
+              "frame_count": true,
+              "mean_marker_rmse": true,
+              "maximum_marker_rmse": true,
+              "joint_limits": true,
+              "velocity_limits": true,
+              "uniform_timeline": true,
+              "no_premade_robot_motion": true
+            },
+            "failed_checks": [],
+            "score": 0.0342793695906845,
+            "thresholds": {
+              "minimum_detection_ratio": 0.35,
+              "minimum_frame_count": 5,
+              "maximum_mean_marker_rmse_m": 0.02,
+              "maximum_marker_rmse_m": 0.05,
+              "maximum_velocity_limit_ratio": 1.0
+            }
+          }
+        }
+      ],
+      "selected_recipe": "fit_first",
+      "selected_trajectory_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/candidate_02_KIT_FruitBars_FullBody_Side_Grasp/trajectory_fit_first.json",
+      "selected_trajectory_sha256": "a75a6a424fc1cbc72cb5a142d51cc0f232292047204ddabd2c5f16c55e204cf3",
+      "passed": true,
+      "selection_score": 0.0342793695906845
+    },
+    {
+      "video_path": "/workspace/anchor-khi-closed-loop-20261014/inputs/videos/KIT_CrackerBox_FullBody_Direct_Grasp.mp4",
+      "video_sha256": "b0ed308277a5dbf33349a0faecf336b5c35767e5c307e643e7c67172d2032395",
+      "human_motion_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/candidate_03_KIT_CrackerBox_FullBody_Direct_Grasp/human_motion_v1.json",
+      "human_motion_sha256": "29e408e978ae8cd77ed606ab801a853f423d50db2ed419d85423b2de69fc2b15",
+      "human_quality": {
+        "decoded_frame_count": 35,
+        "detected_frame_count": 11,
+        "interpolated_frame_count": 0,
+        "emitted_frame_count": 11,
+        "dropped_leading_frame_count": 24,
+        "dropped_trailing_frame_count": 0,
+        "detection_ratio": 0.3142857142857143,
+        "mean_visibility": 0.7620361779223789,
+        "uniform_timeline_preserved": true,
+        "screening_only": true
+      },
+      "attempts": [
+        {
+          "recipe": "balanced",
+          "settings": {
+            "damping": 0.015,
+            "posture_weight": 0.001,
+            "continuity_weight": 0.005,
+            "maximum_iterations": 80,
+            "maximum_step_rad": 0.16,
+            "joint_limit_margin_rad": 0.02,
+            "convergence_m": 0.004
+          },
+          "trajectory_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/candidate_03_KIT_CrackerBox_FullBody_Direct_Grasp/trajectory_balanced.json",
+          "trajectory_sha256": "41f46252b75b1b6a0eb4d2d4bcb9276b3f7ba9e644c8635b2041b993ab5ee549",
+          "quality": {
+            "frame_count": 11,
+            "mean_marker_rmse_m": 0.012870581214256098,
+            "maximum_marker_rmse_m": 0.024920341813974622,
+            "maximum_joint_velocity_rad_s": 0.8990062250000003,
+            "mean_joint_velocity_rad_s": 0.04825562981379309,
+            "maximum_joint_acceleration_rad_s2": 4.8269108975,
+            "maximum_joint_velocity_limit_ratio": 0.024297465540540547,
+            "all_joint_limits_satisfied": true,
+            "all_velocity_limits_satisfied": true
+          },
+          "gate": {
+            "passed": false,
+            "checks": {
+              "detection_ratio": false,
+              "frame_count": true,
+              "mean_marker_rmse": true,
+              "maximum_marker_rmse": true,
+              "joint_limits": true,
+              "velocity_limits": true,
+              "uniform_timeline": true,
+              "no_premade_robot_motion": true
+            },
+            "failed_checks": [
+              "detection_ratio"
+            ],
+            "score": 0.05343497588454513,
+            "thresholds": {
+              "minimum_detection_ratio": 0.35,
+              "minimum_frame_count": 5,
+              "maximum_mean_marker_rmse_m": 0.02,
+              "maximum_marker_rmse_m": 0.05,
+              "maximum_velocity_limit_ratio": 1.0
+            }
+          }
+        },
+        {
+          "recipe": "stability_first",
+          "settings": {
+            "damping": 0.025,
+            "posture_weight": 0.001,
+            "continuity_weight": 0.012,
+            "maximum_iterations": 100,
+            "maximum_step_rad": 0.12,
+            "joint_limit_margin_rad": 0.02,
+            "convergence_m": 0.004
+          },
+          "trajectory_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/candidate_03_KIT_CrackerBox_FullBody_Direct_Grasp/trajectory_stability_first.json",
+          "trajectory_sha256": "ceb77ea59cc1ae87857f23c45ac24abb2f19fb40ed80740c9542819c50de23ce",
+          "quality": {
+            "frame_count": 11,
+            "mean_marker_rmse_m": 0.0150114865188832,
+            "maximum_marker_rmse_m": 0.03950889901696565,
+            "maximum_joint_velocity_rad_s": 1.1715514505000002,
+            "mean_joint_velocity_rad_s": 0.049860263329310345,
+            "maximum_joint_acceleration_rad_s2": 4.512883635000001,
+            "maximum_joint_velocity_limit_ratio": 0.03166355271621622,
+            "all_joint_limits_satisfied": true,
+            "all_velocity_limits_satisfied": true
+          },
+          "gate": {
+            "passed": false,
+            "checks": {
+              "detection_ratio": false,
+              "frame_count": true,
+              "mean_marker_rmse": true,
+              "maximum_marker_rmse": true,
+              "joint_limits": true,
+              "velocity_limits": true,
+              "uniform_timeline": true,
+              "no_premade_robot_motion": true
+            },
+            "failed_checks": [
+              "detection_ratio"
+            ],
+            "score": 0.05923775266427134,
+            "thresholds": {
+              "minimum_detection_ratio": 0.35,
+              "minimum_frame_count": 5,
+              "maximum_mean_marker_rmse_m": 0.02,
+              "maximum_marker_rmse_m": 0.05,
+              "maximum_velocity_limit_ratio": 1.0
+            }
+          }
+        },
+        {
+          "recipe": "fit_first",
+          "settings": {
+            "damping": 0.012,
+            "posture_weight": 0.0005,
+            "continuity_weight": 0.006,
+            "maximum_iterations": 140,
+            "maximum_step_rad": 0.14,
+            "joint_limit_margin_rad": 0.02,
+            "convergence_m": 0.004
+          },
+          "trajectory_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/candidate_03_KIT_CrackerBox_FullBody_Direct_Grasp/trajectory_fit_first.json",
+          "trajectory_sha256": "a3bfdac3f912f60d6210b83d7f10dfd36b1a33ed8e9b21b368f73a48ae454f6e",
+          "quality": {
+            "frame_count": 11,
+            "mean_marker_rmse_m": 0.012248833924525514,
+            "maximum_marker_rmse_m": 0.02617291570184476,
+            "maximum_joint_velocity_rad_s": 1.0155774595,
+            "mean_joint_velocity_rad_s": 0.050705242956896546,
+            "maximum_joint_acceleration_rad_s2": 5.090099665,
+            "maximum_joint_velocity_limit_ratio": 0.027448039445945947,
+            "all_joint_limits_satisfied": true,
+            "all_velocity_limits_satisfied": true
+          },
+          "gate": {
+            "passed": false,
+            "checks": {
+              "detection_ratio": false,
+              "frame_count": true,
+              "mean_marker_rmse": true,
+              "maximum_marker_rmse": true,
+              "joint_limits": true,
+              "velocity_limits": true,
+              "uniform_timeline": true,
+              "no_premade_robot_motion": true
+            },
+            "failed_checks": [
+              "detection_ratio"
+            ],
+            "score": 0.05313267321459288,
+            "thresholds": {
+              "minimum_detection_ratio": 0.35,
+              "minimum_frame_count": 5,
+              "maximum_mean_marker_rmse_m": 0.02,
+              "maximum_marker_rmse_m": 0.05,
+              "maximum_velocity_limit_ratio": 1.0
+            }
+          }
+        }
+      ],
+      "selected_recipe": "fit_first",
+      "selected_trajectory_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/candidate_03_KIT_CrackerBox_FullBody_Direct_Grasp/trajectory_fit_first.json",
+      "selected_trajectory_sha256": "a3bfdac3f912f60d6210b83d7f10dfd36b1a33ed8e9b21b368f73a48ae454f6e",
+      "passed": false,
+      "selection_score": 0.05313267321459288
+    }
+  ],
+  "selected_candidate": {
+    "video_path": "/workspace/anchor-khi-closed-loop-20261014/inputs/videos/GRAB_official_lateral_offset_reach_grasp_lift_phone.mp4",
+    "video_sha256": "73706d15a156087570a7db49b8a319cc12e9885c0f02c15e494a6d122689a460",
+    "human_motion_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/candidate_01_GRAB_official_lateral_offset_reach_grasp_lift_phone/human_motion_v1.json",
+    "human_motion_sha256": "041d7b0a932b58602b6549cd8a032f9d726d24813e15425c49943e4f16354d6e",
+    "human_quality": {
+      "decoded_frame_count": 53,
+      "detected_frame_count": 53,
+      "interpolated_frame_count": 0,
+      "emitted_frame_count": 53,
+      "dropped_leading_frame_count": 0,
+      "dropped_trailing_frame_count": 0,
+      "detection_ratio": 1.0,
+      "mean_visibility": 0.8819494089521702,
+      "uniform_timeline_preserved": true,
+      "screening_only": true
+    },
+    "attempts": [
+      {
+        "recipe": "balanced",
+        "settings": {
+          "damping": 0.015,
+          "posture_weight": 0.001,
+          "continuity_weight": 0.005,
+          "maximum_iterations": 80,
+          "maximum_step_rad": 0.16,
+          "joint_limit_margin_rad": 0.02,
+          "convergence_m": 0.004
+        },
+        "trajectory_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/candidate_01_GRAB_official_lateral_offset_reach_grasp_lift_phone/trajectory_balanced.json",
+        "trajectory_sha256": "bd0c2526cdacd3a6057af20bd0043983bb8d5ffc6bf4fae6f8fb157cbf3fb331",
+        "quality": {
+          "frame_count": 53,
+          "mean_marker_rmse_m": 0.009485306188809856,
+          "maximum_marker_rmse_m": 0.02279279973044657,
+          "maximum_joint_velocity_rad_s": 2.8516152335000005,
+          "mean_joint_velocity_rad_s": 0.07962094494529177,
+          "maximum_joint_acceleration_rad_s2": 22.142860530000004,
+          "maximum_joint_velocity_limit_ratio": 0.0770706819864865,
+          "all_joint_limits_satisfied": true,
+          "all_velocity_limits_satisfied": true
+        },
+        "gate": {
+          "passed": true,
+          "checks": {
+            "detection_ratio": true,
+            "frame_count": true,
+            "mean_marker_rmse": true,
+            "maximum_marker_rmse": true,
+            "joint_limits": true,
+            "velocity_limits": true,
+            "uniform_timeline": true,
+            "no_premade_robot_motion": true
+          },
+          "failed_checks": [],
+          "score": 0.01533764748539447,
+          "thresholds": {
+            "minimum_detection_ratio": 0.35,
+            "minimum_frame_count": 5,
+            "maximum_mean_marker_rmse_m": 0.02,
+            "maximum_marker_rmse_m": 0.05,
+            "maximum_velocity_limit_ratio": 1.0
+          }
+        }
+      },
+      {
+        "recipe": "stability_first",
+        "settings": {
+          "damping": 0.025,
+          "posture_weight": 0.001,
+          "continuity_weight": 0.012,
+          "maximum_iterations": 100,
+          "maximum_step_rad": 0.12,
+          "joint_limit_margin_rad": 0.02,
+          "convergence_m": 0.004
+        },
+        "trajectory_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/candidate_01_GRAB_official_lateral_offset_reach_grasp_lift_phone/trajectory_stability_first.json",
+        "trajectory_sha256": "bd0ef7cedca889335024f4a808e1559eb89a53e6bd4d8ea69e7c5b74fc2b2587",
+        "quality": {
+          "frame_count": 53,
+          "mean_marker_rmse_m": 0.01063055986263775,
+          "maximum_marker_rmse_m": 0.03052289163991694,
+          "maximum_joint_velocity_rad_s": 2.3236224694999996,
+          "mean_joint_velocity_rad_s": 0.07480431165683024,
+          "maximum_joint_acceleration_rad_s2": 18.607195442499997,
+          "maximum_joint_velocity_limit_ratio": 0.06280060728378377,
+          "all_joint_limits_satisfied": true,
+          "all_velocity_limits_satisfied": true
+        },
+        "gate": {
+          "passed": true,
+          "checks": {
+            "detection_ratio": true,
+            "frame_count": true,
+            "mean_marker_rmse": true,
+            "maximum_marker_rmse": true,
+            "joint_limits": true,
+            "velocity_limits": true,
+            "uniform_timeline": true,
+            "no_premade_robot_motion": true
+          },
+          "failed_checks": [],
+          "score": 0.018386883987184553,
+          "thresholds": {
+            "minimum_detection_ratio": 0.35,
+            "minimum_frame_count": 5,
+            "maximum_mean_marker_rmse_m": 0.02,
+            "maximum_marker_rmse_m": 0.05,
+            "maximum_velocity_limit_ratio": 1.0
+          }
+        }
+      },
+      {
+        "recipe": "fit_first",
+        "settings": {
+          "damping": 0.012,
+          "posture_weight": 0.0005,
+          "continuity_weight": 0.006,
+          "maximum_iterations": 140,
+          "maximum_step_rad": 0.14,
+          "joint_limit_margin_rad": 0.02,
+          "convergence_m": 0.004
+        },
+        "trajectory_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/candidate_01_GRAB_official_lateral_offset_reach_grasp_lift_phone/trajectory_fit_first.json",
+        "trajectory_sha256": "6ad615e229c1e5632872b9cad86b47585494c46eeddd0c812ed6a7ea273da08e",
+        "quality": {
+          "frame_count": 53,
+          "mean_marker_rmse_m": 0.009348302112259068,
+          "maximum_marker_rmse_m": 0.02342378019002009,
+          "maximum_joint_velocity_rad_s": 2.777527581,
+          "mean_joint_velocity_rad_s": 0.08069452315484085,
+          "maximum_joint_acceleration_rad_s2": 21.9512501675,
+          "maximum_joint_velocity_limit_ratio": 0.07506831300000001,
+          "all_joint_limits_satisfied": true,
+          "all_velocity_limits_satisfied": true
+        },
+        "gate": {
+          "passed": true,
+          "checks": {
+            "detection_ratio": true,
+            "frame_count": true,
+            "mean_marker_rmse": true,
+            "maximum_marker_rmse": true,
+            "joint_limits": true,
+            "velocity_limits": true,
+            "uniform_timeline": true,
+            "no_premade_robot_motion": true
+          },
+          "failed_checks": [],
+          "score": 0.015354383785764092,
+          "thresholds": {
+            "minimum_detection_ratio": 0.35,
+            "minimum_frame_count": 5,
+            "maximum_mean_marker_rmse_m": 0.02,
+            "maximum_marker_rmse_m": 0.05,
+            "maximum_velocity_limit_ratio": 1.0
+          }
+        }
+      }
+    ],
+    "selected_recipe": "balanced",
+    "selected_trajectory_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/candidate_01_GRAB_official_lateral_offset_reach_grasp_lift_phone/trajectory_balanced.json",
+    "selected_trajectory_sha256": "bd0c2526cdacd3a6057af20bd0043983bb8d5ffc6bf4fae6f8fb157cbf3fb331",
+    "passed": true,
+    "selection_score": 0.01533764748539447
+  },
+  "khi_integration": {
+    "emitted": true,
+    "robot_reference": {
+      "schema_version": 1,
+      "kind": "anchor_khi_g1_export_receipt_v1",
+      "output_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/selected_khi_g1_reference.pkl",
+      "output_sha256": "7b667279c085ec85e754ce8f5525933ba3d6961c83bc9a7a88c83129b265c961",
+      "motion_key": "anchor_bd0c2526cdacd3a6",
+      "frame_count": 53,
+      "joint_count": 29,
+      "fps": 5.0,
+      "joblib_round_trip": true,
+      "uses_premade_robot_motion": false,
+      "source_trajectory_sha256": "bd0c2526cdacd3a6057af20bd0043983bb8d5ffc6bf4fae6f8fb157cbf3fb331"
+    },
+    "object_reference": {
+      "schema_version": 1,
+      "kind": "anchor_khi_object_export_receipt_v1",
+      "output_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/selected_khi_object_reference.pkl",
+      "output_sha256": "a7df292701448ec3116a3a3bd0b4818e08345d3a735db16a5a86588e1c570da9",
+      "motion_key": "anchor_bd0c2526cdacd3a6",
+      "frame_count": 53,
+      "relative_position_m": [
+        0.4869999885559082,
+        -0.18000000715255737,
+        -0.08900000154972076
+      ],
+      "free_object": true,
+      "object_pose_commands_after_reset": false,
+      "pair_validation": {
+        "valid": true,
+        "robot_reference_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/selected_khi_g1_reference.pkl",
+        "robot_reference_sha256": "7b667279c085ec85e754ce8f5525933ba3d6961c83bc9a7a88c83129b265c961",
+        "object_reference_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/selected_khi_object_reference.pkl",
+        "object_reference_sha256": "a7df292701448ec3116a3a3bd0b4818e08345d3a735db16a5a86588e1c570da9",
+        "motion_key": "anchor_bd0c2526cdacd3a6",
+        "frame_count": 53,
+        "initial_relative_object_position_m": [
+          0.4869999885559082,
+          -0.18000000715255737,
+          -0.08899998664855957
+        ],
+        "khi_replay_fields_present": true
+      }
+    },
+    "pair_validation": {
+      "valid": true,
+      "robot_reference_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/selected_khi_g1_reference.pkl",
+      "robot_reference_sha256": "7b667279c085ec85e754ce8f5525933ba3d6961c83bc9a7a88c83129b265c961",
+      "object_reference_path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/selected_khi_object_reference.pkl",
+      "object_reference_sha256": "a7df292701448ec3116a3a3bd0b4818e08345d3a735db16a5a86588e1c570da9",
+      "motion_key": "anchor_bd0c2526cdacd3a6",
+      "frame_count": 53,
+      "initial_relative_object_position_m": [
+        0.4869999885559082,
+        -0.18000000715255737,
+        -0.08899998664855957
+      ],
+      "khi_replay_fields_present": true
+    }
+  },
+  "physics_feedback": {
+    "feedback_present": false,
+    "physics_qualified": false,
+    "next_action": "run_khi_isaac_lab_physics_evaluation"
+  },
+  "technical_pass": true,
+  "physics_pass": false,
+  "production_release_ready": false
+}

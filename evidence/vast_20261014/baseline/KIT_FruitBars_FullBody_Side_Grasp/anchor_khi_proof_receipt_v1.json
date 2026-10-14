@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "kind": "anchor_khi_proof_verification_v1",
+  "manifest_path": "/workspace/anchor-khi-closed-loop-20261014/generated/baseline/KIT_FruitBars_FullBody_Side_Grasp/anchor_khi_proof_manifest_v1.json",
+  "manifest_sha256": "3429def2c592e0bf58c599f3343f953105a33e51c75839a7530c9095c3a5be93",
+  "verified_at": "2026-10-14T11:47:34.895325+00:00",
+  "artifact_checks": [
+    {
+      "id": "human_video",
+      "exists": true,
+      "hash_matches": true,
+      "actual_sha256": "16f0c9c2fae464d1191b36a8ee04e9f0099e02da7e89a88a599bed364547e4e0"
+    },
+    {
+      "id": "human_motion",
+      "exists": true,
+      "hash_matches": true,
+      "actual_sha256": "0651f291f57024eb6f9bb9015a28c7f64903d3be9583758162b4ff40081aaee7"
+    },
+    {
+      "id": "hcs_g1_trajectory",
+      "exists": true,
+      "hash_matches": true,
+      "actual_sha256": "598e98f66f997cb2dae7b1e5963b8b3099641e769c965df8bf2e4c27168dc646"
+    },
+    {
+      "id": "khi_g1_reference",
+      "exists": true,
+      "hash_matches": true,
+      "actual_sha256": "1d93b110944a6c36b62c8c7ee28ab58623d23dac5991c17a39f38a967091cf08"
+    },
+    {
+      "id": "khi_object_reference",
+      "exists": true,
+      "hash_matches": true,
+      "actual_sha256": "6f291f4a641b4a7cc90508366aa3e461f839ac9c89ebb80c4c9216d0395d741d"
+    },
+    {
+      "id": "khi_g1_urdf",
+      "exists": true,
+      "hash_matches": true,
+      "actual_sha256": "05c644bbf64ddea02c701f07c636c643930690a7072eaa38157ac7b362109011"
+    },
+    {
+      "id": "khi_grail_compatibility_replay",
+      "exists": true,
+      "hash_matches": true,
+      "actual_sha256": "ad17b478b4fd3aea5f213b4db3bc00642ea7bbc456444e0232380d99eac1373c"
+    },
+    {
+      "id": "khi_training_environment",
+      "exists": true,
+      "hash_matches": true,
+      "actual_sha256": "011660386bd9753e89f67c26b381ccc0f99bfa2cb105fa2d6f9e21790ccf560e"
+    },
+    {
+      "id": "khi_reward_and_action_logic",
+      "exists": true,
+      "hash_matches": true,
+      "actual_sha256": "04247451c200b1fa94c90ada039ad3305f6ffe1dd1b2b9bec317f7748bcea562"
+    },
+    {
+      "id": "khi_ppo_configuration",
+      "exists": true,
+      "hash_matches": true,
+      "actual_sha256": "11557a46ee9dc55230dabef378caf12713e6dbf1685adbe6fd06bb93c3b1838d"
+    },
+    {
+      "id": "khi_runbook",
+      "exists": true,
+      "hash_matches": true,
+      "actual_sha256": "4d3263ebbc2c0381deb02d0448ba44c09ac48607c1cb1c95596983b5e09e6749"
+    },
+    {
+      "id": "anchor_pose_extractor",
+      "exists": true,
+      "hash_matches": true,
+      "actual_sha256": "36b533487d83a4d0a4fa22f85e02dcf78a82416c38c057c4ed0280bd469b479c"
+    },
+    {
+      "id": "anchor_urdf_kinematics",
+      "exists": true,
+      "hash_matches": true,
+      "actual_sha256": "0282e3b93569a6c2e8e3b7810049c906401eaa2d7b80a4f852c9cca1f6e3f7ec"
+    },
+    {
+      "id": "anchor_g1_retargeter",
+      "exists": true,
+      "hash_matches": true,
+      "actual_sha256": "e814136d580eb8494a8d1d0475b93d6fdb70575c3785547329716d6a06233913"
+    },
+    {
+      "id": "anchor_khi_exporter",
+      "exists": true,
+      "hash_matches": true,
+      "actual_sha256": "fd313bac73318f238e5770ee34c190c8311270f94aa45db2f2f44b72bc319ab8"
+    },
+    {
+      "id": "anchor_proof_verifier",
+      "exists": true,
+      "hash_matches": true,
+      "actual_sha256": "8b9a5b43fc02b53093578499a8790b15360b4bd20014f548b3fad55e8bbdf627"
+    }
+  ],
+  "lineage_checks": {
+    "human_pose_names_source_video": true,
+    "trajectory_names_source_video": true,
+    "trajectory_names_human_pose": true,
+    "trajectory_uses_khi_urdf": true,
+    "trajectory_excludes_premade_robot_motion": true,
+    "khi_reference_names_trajectory": true,
+    "khi_reference_joblib_loader_compatible": true,
+    "khi_robot_object_motion_keys_match": true,
+    "khi_replay_fields_present": true
+  },
+  "technical_lineage_complete": true,
+  "human_video_used": true,
+  "uses_premade_robot_motion": false,
+  "screening_pose_only": true,
+  "source_rights_verified": false,
+  "khi_physics_simulation_verified": false,
+  "physical_robot_verified": false,
+  "production_release_ready": false,
+  "verdict": "TECHNICAL_LINEAGE_PASS_SCREENING_ONLY"
+}

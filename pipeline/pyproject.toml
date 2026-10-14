@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "anchor-pipeline"
-version = "0.3.0a0"
+version = "0.4.0a0"
 description = "Anchor — a trust-graded data refinery for humanoid robot learning. Video in, provenance-verified robot-ready training data out."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -28,7 +28,9 @@ dependencies = [
 ingest = ["requests>=2.31"]
 segment = ["torch>=2.1", "transformers>=4.40", "pillow>=10.0", "opencv-python-headless>=4.9"]
 noise = ["scipy>=1.11"]
-all = ["anchor-pipeline[ingest,segment,noise]"]
+proof = ["mediapipe==0.10.31", "joblib>=1.5,<2"]
+policy = ["torch>=2.5"]
+all = ["anchor-pipeline[ingest,segment,noise,proof,policy]"]
 
 [project.scripts]
 anchor = "anchor.cli:main"

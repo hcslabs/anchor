@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "kind": "anchor_embodiment_profile_v1",
+  "status": "validated",
+  "robot_id": "unitree_g1_29dof",
+  "urdf_role": "KHI physical-project geometry, axes and joint limits",
+  "joint_order": [
+    "left_hip_pitch_joint", "left_hip_roll_joint", "left_hip_yaw_joint",
+    "left_knee_joint", "left_ankle_pitch_joint", "left_ankle_roll_joint",
+    "right_hip_pitch_joint", "right_hip_roll_joint", "right_hip_yaw_joint",
+    "right_knee_joint", "right_ankle_pitch_joint", "right_ankle_roll_joint",
+    "waist_yaw_joint", "waist_roll_joint", "waist_pitch_joint",
+    "left_shoulder_pitch_joint", "left_shoulder_roll_joint", "left_shoulder_yaw_joint",
+    "left_elbow_joint", "left_wrist_roll_joint", "left_wrist_pitch_joint", "left_wrist_yaw_joint",
+    "right_shoulder_pitch_joint", "right_shoulder_roll_joint", "right_shoulder_yaw_joint",
+    "right_elbow_joint", "right_wrist_roll_joint", "right_wrist_pitch_joint", "right_wrist_yaw_joint"
+  ],
+  "marker_links": {
+    "pelvis": "pelvis",
+    "torso": {
+      "mode": "centroid",
+      "links": ["left_shoulder_pitch_link", "right_shoulder_pitch_link"]
+    },
+    "left_shoulder": "left_shoulder_pitch_link",
+    "left_elbow": "left_elbow_link",
+    "left_wrist": "left_rubber_hand",
+    "right_shoulder": "right_shoulder_pitch_link",
+    "right_elbow": "right_elbow_link",
+    "right_wrist": "right_rubber_hand",
+    "left_hip": "left_hip_pitch_link",
+    "left_knee": "left_knee_link",
+    "left_ankle": "left_ankle_roll_link",
+    "right_hip": "right_hip_pitch_link",
+    "right_knee": "right_knee_link",
+    "right_ankle": "right_ankle_roll_link"
+  },
+  "skeleton_edges": [
+    ["pelvis", "torso"],
+    ["torso", "left_shoulder"], ["left_shoulder", "left_elbow"], ["left_elbow", "left_wrist"],
+    ["torso", "right_shoulder"], ["right_shoulder", "right_elbow"], ["right_elbow", "right_wrist"],
+    ["pelvis", "left_hip"], ["left_hip", "left_knee"], ["left_knee", "left_ankle"],
+    ["pelvis", "right_hip"], ["right_hip", "right_knee"], ["right_knee", "right_ankle"]
+  ],
+  "marker_weights": {
+    "torso": 2.0,
+    "left_shoulder": 1.0, "right_shoulder": 1.0,
+    "left_elbow": 2.0, "right_elbow": 2.0,
+    "left_wrist": 4.0, "right_wrist": 4.0,
+    "left_hip": 1.0, "right_hip": 1.0,
+    "left_knee": 2.0, "right_knee": 2.0,
+    "left_ankle": 4.0, "right_ankle": 4.0
+  },
+  "profiles": {
+    "full_body": {
+      "joints": [
+        "left_hip_pitch_joint", "left_hip_roll_joint", "left_hip_yaw_joint",
+        "left_knee_joint", "left_ankle_pitch_joint", "left_ankle_roll_joint",
+        "right_hip_pitch_joint", "right_hip_roll_joint", "right_hip_yaw_joint",
+        "right_knee_joint", "right_ankle_pitch_joint", "right_ankle_roll_joint",
+        "waist_yaw_joint", "waist_roll_joint", "waist_pitch_joint",
+        "left_shoulder_pitch_joint", "left_shoulder_roll_joint", "left_shoulder_yaw_joint",
+        "left_elbow_joint", "left_wrist_roll_joint", "left_wrist_pitch_joint", "left_wrist_yaw_joint",
+        "right_shoulder_pitch_joint", "right_shoulder_roll_joint", "right_shoulder_yaw_joint",
+        "right_elbow_joint", "right_wrist_roll_joint", "right_wrist_pitch_joint", "right_wrist_yaw_joint"
+      ],
+      "markers": [
+        "torso", "left_shoulder", "left_elbow", "left_wrist",
+        "right_shoulder", "right_elbow", "right_wrist",
+        "left_hip", "left_knee", "left_ankle", "right_hip", "right_knee", "right_ankle"
+      ]
+    },
+    "khi_tabletop_right": {
+      "joints": [
+        "waist_yaw_joint", "waist_roll_joint", "waist_pitch_joint",
+        "right_shoulder_pitch_joint", "right_shoulder_roll_joint", "right_shoulder_yaw_joint",
+        "right_elbow_joint", "right_wrist_roll_joint", "right_wrist_pitch_joint", "right_wrist_yaw_joint"
+      ],
+      "markers": ["torso", "right_shoulder", "right_elbow", "right_wrist"]
+    }
+  },
+  "integration_contract": "khi_g1_29dof_joblib_v1"
+}

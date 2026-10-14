@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "kind": "anchor_production_gate_receipt_v1",
+  "checks": {
+    "lineage": true,
+    "policy": true,
+    "physics_mapping_exact": false,
+    "physics_tracking": true,
+    "physics_upright": true,
+    "joint_limits": true,
+    "task_success": false,
+    "hold": false
+  },
+  "failed_checks": [
+    "physics_mapping_exact",
+    "task_success",
+    "hold"
+  ],
+  "thresholds": {
+    "maximum_policy_joint_rmse_rad": 0.05,
+    "maximum_physics_joint_rmse_rad": 0.12,
+    "minimum_upright_fraction": 0.99,
+    "maximum_joint_limit_violations": 0,
+    "minimum_grasp_success_rate": 0.7,
+    "minimum_hold_s": 5.0
+  },
+  "next_action": "install_exact_robot_collision_asset_and_actuator_model",
+  "production_release_ready": false,
+  "physical_robot_execution_authorized": false,
+  "evidence": {
+    "lineage": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/anchor_closed_loop_receipt_v1.json",
+    "policy": "/workspace/anchor-khi-closed-loop-20261014/generated/isaaclab_policy_physics/policy/anchor_motion_prior_policy_receipt_v1.json",
+    "physics": "/workspace/anchor-khi-closed-loop-20261014/generated/isaaclab_policy_physics/anchor_isaaclab_physics_playback_receipt_v1.json",
+    "task": null
+  }
+}

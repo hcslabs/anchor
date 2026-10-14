@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "kind": "anchor_khi_human_video_proof_v1",
+  "proof_id": "anchor-khi-g1-human-video-retarget-v1",
+  "created_at": "2026-10-14T11:12:49.213480+00:00",
+  "claim": "The KHI-compatible G1 reference was computed from the selected human video by HCS retargeting code, not copied from a released robot-motion dataset.",
+  "disk_policy": {
+    "artifact_mode": "hash_references_no_copy",
+    "large_source_files_duplicated": false
+  },
+  "artifacts": [
+    {
+      "id": "human_video",
+      "role": "source",
+      "description": "Human demonstration video selected for the KHI tabletop proof.",
+      "path": "C:\\Users\\salio\\Downloads\\GRAB_official_lateral_offset_reach_grasp_lift_phone.mp4",
+      "exists": true,
+      "size_bytes": 239264,
+      "sha256": "73706d15a156087570a7db49b8a319cc12e9885c0f02c15e494a6d122689a460",
+      "copied_into_capsule": false
+    },
+    {
+      "id": "human_motion",
+      "role": "derived",
+      "description": "Body-aligned 3-D human landmarks extracted from the selected video.",
+      "path": "C:\\Users\\salio\\anchor_page\\evidence\\khi_g1\\lateral_grab\\human_motion_v1.json",
+      "exists": true,
+      "size_bytes": 108418,
+      "sha256": "8a1006689fcbc1d37f80db9911ae52545b2afcad8a8472bd016720a3995dce88",
+      "copied_into_capsule": false
+    },
+    {
+      "id": "hcs_g1_trajectory",
+      "role": "derived",
+      "description": "HCS-owned morphology-aware G1 joint trajectory; no pre-made robot motion.",
+      "path": "C:\\Users\\salio\\anchor_page\\evidence\\khi_g1\\lateral_grab\\hcs_g1_retarget_v1.json",
+      "exists": true,
+      "size_bytes": 38661,
+      "sha256": "c081696c51bf2d8295427d583c375a82b28c71ca5689b67454401e260204c64f",
+      "copied_into_capsule": false
+    },
+    {
+      "id": "khi_g1_reference",
+      "role": "integration",
+      "description": "Joblib reference accepted by the KHI Isaac Lab reference loader.",
+      "path": "C:\\Users\\salio\\anchor_page\\evidence\\khi_g1\\lateral_grab\\khi_g1_reference.pkl",
+      "exists": true,
+      "size_bytes": 3323,
+      "sha256": "bd35ae747dcee90b823fc02230041a0195ea63c18092ad9ac2083ec4bfe00828",
+      "copied_into_capsule": false
+    },
+    {
+      "id": "khi_object_reference",
+      "role": "integration",
+      "description": "Key-matched free-cube initialization companion for the KHI replay loader.",
+      "path": "C:\\Users\\salio\\anchor_page\\evidence\\khi_g1\\lateral_grab\\khi_object_reference.pkl",
+      "exists": true,
+      "size_bytes": 594,
+      "sha256": "926afab68b49006efe1ed42e8b3e9731670a873450c53d08a98ba2e7eb59432d",
+      "copied_into_capsule": false
+    },
+    {
+      "id": "khi_g1_urdf",
+      "role": "khi_project",
+      "description": "The exact 29-DoF geometry, axes, and limits used by the physical KHI project.",
+      "path": "C:\\Users\\salio\\Downloads\\G1_COMPLETE_HANDOFF_20260915_01\\source\\g1-aprilcube-autonomy\\g1_29dof_pc2.urdf",
+      "exists": true,
+      "size_bytes": 42994,
+      "sha256": "05c644bbf64ddea02c701f07c636c643930690a7072eaa38157ac7b362109011",
+      "copied_into_capsule": false
+    },
+    {
+      "id": "khi_grail_compatibility_replay",
+      "role": "khi_project",
+      "description": "KHI physics replay contract used to validate reference layout and free-object behavior.",
+      "path": "C:\\Users\\salio\\Downloads\\G1_COMPLETE_HANDOFF_20260915_01\\source\\g1-aprilcube-autonomy\\simulation\\unitree_sim_isaaclab\\tools\\aprilcube_inspire_grail_replay.py",
+      "exists": true,
+      "size_bytes": 12881,
+      "sha256": "ad17b478b4fd3aea5f213b4db3bc00642ea7bbc456444e0232380d99eac1373c",
+      "copied_into_capsule": false
+    },
+    {
+      "id": "khi_training_environment",
+      "role": "khi_project",
+      "description": "KHI Isaac Lab RH56 grasp environment consuming a G1 reference.",
+      "path": "C:\\Users\\salio\\Downloads\\G1_COMPLETE_HANDOFF_20260915_01\\source\\g1-aprilcube-autonomy\\simulation\\unitree_sim_isaaclab\\rh56_grasp_rl\\env_cfg.py",
+      "exists": true,
+      "size_bytes": 12326,
+      "sha256": "011660386bd9753e89f67c26b381ccc0f99bfa2cb105fa2d6f9e21790ccf560e",
+      "copied_into_capsule": false
+    },
+    {
+      "id": "khi_reward_and_action_logic",
+      "role": "khi_project",
+      "description": "KHI reference playback, reward, contact, lift, and hold logic.",
+      "path": "C:\\Users\\salio\\Downloads\\G1_COMPLETE_HANDOFF_20260915_01\\source\\g1-aprilcube-autonomy\\simulation\\unitree_sim_isaaclab\\rh56_grasp_rl\\mdp.py",
+      "exists": true,
+      "size_bytes": 12869,
+      "sha256": "04247451c200b1fa94c90ada039ad3305f6ffe1dd1b2b9bec317f7748bcea562",
+      "copied_into_capsule": false
+    },
+    {
+      "id": "khi_ppo_configuration",
+      "role": "khi_project",
+      "description": "KHI PPO training configuration.",
+      "path": "C:\\Users\\salio\\Downloads\\G1_COMPLETE_HANDOFF_20260915_01\\source\\g1-aprilcube-autonomy\\simulation\\unitree_sim_isaaclab\\rh56_grasp_rl\\agents\\rsl_rl_ppo_cfg.py",
+      "exists": true,
+      "size_bytes": 1040,
+      "sha256": "11557a46ee9dc55230dabef378caf12713e6dbf1685adbe6fd06bb93c3b1838d",
+      "copied_into_capsule": false
+    },
+    {
+      "id": "khi_runbook",
+      "role": "khi_project",
+      "description": "KHI simulation and evaluation runbook.",
+      "path": "C:\\Users\\salio\\Downloads\\G1_COMPLETE_HANDOFF_20260915_01\\source\\g1-aprilcube-autonomy\\simulation\\RUN_ON_VAST.md",
+      "exists": true,
+      "size_bytes": 10810,
+      "sha256": "4d3263ebbc2c0381deb02d0448ba44c09ac48607c1cb1c95596983b5e09e6749",
+      "copied_into_capsule": false
+    },
+    {
+      "id": "anchor_pose_extractor",
+      "role": "anchor_code",
+      "description": "HCS video decoding, human-pose extraction, body-frame normalization, and provenance code.",
+      "path": "C:\\Users\\salio\\anchor_page\\pipeline\\src\\anchor\\enrich\\human_pose.py",
+      "exists": true,
+      "size_bytes": 12375,
+      "sha256": "36b533487d83a4d0a4fa22f85e02dcf78a82416c38c057c4ed0280bd469b479c",
+      "copied_into_capsule": false
+    },
+    {
+      "id": "anchor_urdf_kinematics",
+      "role": "anchor_code",
+      "description": "HCS URDF FK and analytic point-Jacobian implementation.",
+      "path": "C:\\Users\\salio\\anchor_page\\pipeline\\src\\anchor\\retarget\\kinematics.py",
+      "exists": true,
+      "size_bytes": 7301,
+      "sha256": "0282e3b93569a6c2e8e3b7810049c906401eaa2d7b80a4f852c9cca1f6e3f7ec",
+      "copied_into_capsule": false
+    },
+    {
+      "id": "anchor_g1_retargeter",
+      "role": "anchor_code",
+      "description": "HCS robot-proportioned, joint-limited DLS retargeter and KHI profile.",
+      "path": "C:\\Users\\salio\\anchor_page\\pipeline\\src\\anchor\\retarget\\hcs_g1.py",
+      "exists": true,
+      "size_bytes": 15599,
+      "sha256": "e814136d580eb8494a8d1d0475b93d6fdb70575c3785547329716d6a06233913",
+      "copied_into_capsule": false
+    },
+    {
+      "id": "anchor_khi_exporter",
+      "role": "anchor_code",
+      "description": "HCS KHI joblib exporter and exact-loader compatibility validator.",
+      "path": "C:\\Users\\salio\\anchor_page\\pipeline\\src\\anchor\\integrations\\khi_g1.py",
+      "exists": true,
+      "size_bytes": 10170,
+      "sha256": "fd313bac73318f238e5770ee34c190c8311270f94aa45db2f2f44b72bc319ab8",
+      "copied_into_capsule": false
+    },
+    {
+      "id": "anchor_proof_verifier",
+      "role": "anchor_code",
+      "description": "HCS no-copy manifest and lineage verifier.",
+      "path": "C:\\Users\\salio\\anchor_page\\pipeline\\src\\anchor\\proof.py",
+      "exists": true,
+      "size_bytes": 11578,
+      "sha256": "8b9a5b43fc02b53093578499a8790b15360b4bd20014f548b3fad55e8bbdf627",
+      "copied_into_capsule": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "human_video",
+      "to": "human_motion",
+      "relation": "pose_extracted_from"
+    },
+    {
+      "from": "anchor_pose_extractor",
+      "to": "human_motion",
+      "relation": "generated_by"
+    },
+    {
+      "from": "human_motion",
+      "to": "hcs_g1_trajectory",
+      "relation": "retargeted_by_hcs"
+    },
+    {
+      "from": "anchor_g1_retargeter",
+      "to": "hcs_g1_trajectory",
+      "relation": "generated_by"
+    },
+    {
+      "from": "anchor_urdf_kinematics",
+      "to": "hcs_g1_trajectory",
+      "relation": "kinematics_backend"
+    },
+    {
+      "from": "khi_g1_urdf",
+      "to": "hcs_g1_trajectory",
+      "relation": "defines_embodiment"
+    },
+    {
+      "from": "hcs_g1_trajectory",
+      "to": "khi_g1_reference",
+      "relation": "exported_without_motion_substitution"
+    },
+    {
+      "from": "anchor_khi_exporter",
+      "to": "khi_g1_reference",
+      "relation": "generated_by"
+    },
+    {
+      "from": "khi_g1_reference",
+      "to": "khi_object_reference",
+      "relation": "shares_motion_key_with"
+    },
+    {
+      "from": "anchor_khi_exporter",
+      "to": "khi_object_reference",
+      "relation": "generated_by"
+    },
+    {
+      "from": "khi_g1_reference",
+      "to": "khi_training_environment",
+      "relation": "loader_compatible_with"
+    }
+  ],
+  "scope": {
+    "technical_lineage": "must verify locally",
+    "physics_simulation": "not run by this lightweight proof",
+    "physical_robot_execution": "not authorized by this proof",
+    "production_pose_reconstruction": "requires VideoMimic/SMPL-X or equivalent metric pass",
+    "source_rights": "must be attested before external release or training use"
+  }
+}

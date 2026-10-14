@@ -454,19 +454,19 @@ footer .fnote a { color: var(--text-faint); }
   <div class="wrap">
     <p class="eyebrow">Data Infrastructure for Humanoid Imitation Learning</p>
     <h1 class="headline">Building <span class="accent-text">Anchor</span>: a trust-graded data refinery for humanoid robot learning.</h1>
-    <p class="sub">Anchor turns ordinary human video — handheld clips, warehouse footage, footage you already have — into provenance-verified, feasibility-checked, robot-ready training data. This page documents the acquisition and retargeting engine we've built and validated as Anchor's first working component.</p>
+    <p class="sub">Anchor is being built to turn approved human video — handheld clips, warehouse footage, footage you already have — into provenance-traceable, feasibility-checked robot training data. A hash-bound human-video → Unitree G1 → KHI integration proof is working today; production reconstruction, object/contact recovery, and physics release gates remain in validation.</p>
 
     <div class="abstract-box">
       <div class="abstract-k">What Anchor is</div>
-      <p>Anchor is an in-development data refinery for humanoid robot learning: a pipeline that ingests human video, verifies its provenance, reconstructs the person and the scene, retargets the motion onto a specific robot's own joints with a feasibility score, and packages the result into a structured, trainable dataset. The thesis is that raw video is no longer the bottleneck for training humanoid policies — trustworthy, training-ready, embodiment-grounded video is. The acquisition and retargeting layer documented on this page is the part of that pipeline we've built and validated first.</p>
+      <p>Anchor is an in-development data refinery for humanoid robot learning: a pipeline that ingests human video, records its provenance, reconstructs the person and scene, retargets motion onto a target robot's own geometry, and packages the result into structured training data. The working KHI proof binds the selected video bytes to extracted human landmarks, HCS-computed G1 joints, and the exact KHI loader by SHA-256. It deliberately does not treat screening pose, unverified source rights, or a loader-compatible trajectory as proof of physics or real-robot success.</p>
     </div>
 
     <div class="stage-graph-wrap">
-      <img src="assets/anchor_stage_graph.png" alt="Anchor's seven-stage pipeline. Stages 01 through 04 (Intake, Trust, Gates, Enrich) are partially validated, building on prior Fotographer AI know-how. Stage 05 (Retarget) is validated end to end.">
+      <img src="assets/anchor_stage_graph.png" alt="Anchor's seven-stage pipeline. Intake and open gates are working; enrich is partial; the HCS Unitree G1 body retargeter and KHI proof adapter are working; advanced trust, contact, packaging, and serving remain closed or incomplete.">
     </div>
 
     <div class="hero-meta">
-      <span><b>Status:</b> Internal validation complete</span>
+      <span><b>Status:</b> KHI technical-lineage proof passed; production validation in progress</span>
       <span><b>Target platform:</b> Unitree G1 (additional platforms in progress)</span>
       <span><b>Team:</b> HCS Labs</span>
     </div>
@@ -484,7 +484,7 @@ footer .fnote a { color: var(--text-faint); }
         <div class="lineage-cell"><img src="assets/lineage_04_retargeted.png" alt="Motion retargeted to a Unitree G1 humanoid, same sitting pose"><div class="tag"><span class="num">04</span>Retargeted</div></div>
       </div>
       <div class="lineage-foot">
-        <span>↑ actual output from an internal validation run</span>
+        <span>↑ lineage illustration; reproducible KHI proof artifacts are linked in the repository</span>
         <span>input: single handheld video clip</span>
       </div>
     </div>
@@ -689,10 +689,10 @@ cascade = <span class="c-fn">GateCascade</span>(<span class="c-fn">default_open_
 
 <section id="validation">
   <div class="wrap">
-    <p class="section-label">04 — Validation</p>
-    <h2>Checked against a published research benchmark.</h2>
-    <p class="lede">The scene-and-human reconstruction stage of this pipeline builds on <a href="https://arxiv.org/abs/2505.03729" target="_blank" rel="noopener">VideoMimic</a> (Allshire, Choi et al., CoRL 2025), a published real-to-sim research method. We re-ran that method's own evaluation protocol — a filtered six-sequence subset of the SLOPER4D dataset, comparing reconstructed human trajectories and scene geometry against real motion-capture-grade ground truth (a 17-IMU mocap suit fused with LiDAR) — the same benchmark VideoMimic's own paper reports against.</p>
-    <p class="lede" style="margin-top:18px;">Everything downstream of reconstruction is ours: the data-acquisition pipeline that gets raw video into that stage reliably, the multi-robot retargeting layer that maps the reconstruction onto a specific humanoid's own joints and dynamics, and the feature-extraction work that turns a reconstructed clip into the structured, queryable record a training system can actually use.</p>
+    <p class="section-label">04 — Historical reconstruction benchmark</p>
+    <h2>Reconstruction quality measured against a published protocol.</h2>
+    <p class="lede">The scene-and-human reconstruction stage of this pipeline builds on <a href="https://arxiv.org/abs/2505.03729" target="_blank" rel="noopener">VideoMimic</a> (Allshire, Choi et al., CoRL 2025). The table below records a historical internal rerun of its filtered SLOPER4D protocol. It is separate from the new KHI technical-lineage receipt; an external benchmark claim should include the raw run bundle and hashes.</p>
+    <p class="lede" style="margin-top:18px;">VideoMimic publishes both reconstruction and a baseline G1 real-to-sim path. We do not claim those published components as HCS IP. HCS's implementation contribution is the provenance and quality layer, an independently implemented robot-proportioned DLS retargeter, task-specific embodiment profiles, KHI export/verification adapters, and the closed feedback process that turns measured simulation or robot gaps into the next data recipe.</p>
 
     <table class="bench-table">
       <thead>
@@ -701,10 +701,10 @@ cascade = <span class="c-fn">GateCascade</span>(<span class="c-fn">default_open_
       <tbody>
         <tr><td>WHAM*</td><td>189.29</td><td>1148.49</td><td>—</td></tr>
         <tr><td>TRAM</td><td>149.48</td><td>954.90</td><td>—</td></tr>
-        <tr class="ours"><td>Our 3D scene reconstruction pipeline (customized from VideoMimic)</td><td>112.13</td><td>696.62</td><td>0.75</td></tr>
+        <tr class="ours"><td>Historical internal VideoMimic-based rerun</td><td>112.13</td><td>696.62</td><td>0.75</td></tr>
       </tbody>
     </table>
-    <p class="bench-note">*WHAM does not perform environment reconstruction, so no Chamfer Distance is reported. WHAM and TRAM figures are the original papers' own published numbers, shown as baselines. Our pipeline's figures are our own results from re-running VideoMimic's evaluation protocol (<a href="https://arxiv.org/abs/2505.03729" target="_blank" rel="noopener">arXiv:2505.03729</a>, Table 2 protocol, SLOPER4D filtered subset) — measured by us on this run, not cited from the paper.</p>
+    <p class="bench-note">*WHAM does not perform environment reconstruction, so no Chamfer Distance is reported. WHAM and TRAM figures are cited baselines. The highlighted values are a historical internal rerun of the <a href="https://arxiv.org/abs/2505.03729" target="_blank" rel="noopener">VideoMimic</a> protocol and are not covered by the KHI proof capsule currently stored in this repository.</p>
 
     <div class="eq-defs">
       <div class="eq-def">
@@ -829,19 +829,19 @@ cascade = <span class="c-fn">GateCascade</span>(<span class="c-fn">default_open_
       <div class="status-card open">
         <div class="status-head"><span class="badge open">Available</span><h4>Working today</h4></div>
         <ul>
-          <li>Video-to-motion-data pipeline, end to end</li>
-          <li>Joint environment + human reconstruction</li>
-          <li>Ground-contact-aware retargeting</li>
-          <li>Unitree G1 joint mapping</li>
-          <li>Benchmark validation against published research</li>
+          <li>Content-addressed human-video intake and open quality gates</li>
+          <li>Screening human-pose extraction with explicit quality labeling</li>
+          <li>HCS robot-proportioned, joint-limited Unitree G1 retargeting</li>
+          <li>KHI joblib export and exact-loader round-trip validation</li>
+          <li>No-copy SHA-256 proof from video to KHI project files</li>
         </ul>
       </div>
       <div class="status-card soon">
         <div class="status-head"><span class="badge soon">Coming soon</span><h4>In progress</h4></div>
         <ul>
           <li>Additional humanoid platform support</li>
-          <li>Object interaction / manipulation data</li>
-          <li>Marker-based mocap cross-validation</li>
+          <li>Metric VideoMimic/SMPL-X production reconstruction</li>
+          <li>Object/contact recovery and marker-based cross-validation</li>
           <li>Public benchmark suite results (3DPW)</li>
           <li>Source release</li>
         </ul>
@@ -861,13 +861,13 @@ cascade = <span class="c-fn">GateCascade</span>(<span class="c-fn">default_open_
     <h2>Built on published research, our own retargeting and acquisition layer, and prior video infrastructure work.</h2>
     <div class="bg-grid">
       <div>
-        <p>The scene-and-human reconstruction underlying this pipeline builds on <a href="https://arxiv.org/abs/2505.03729" target="_blank" rel="noopener">VideoMimic</a>, a published real-to-sim research method that demonstrated monocular video could be reconstructed into a metrically consistent human-and-environment scene. We use that method for reconstruction only. Everything that turns a reconstruction into usable robot data — the acquisition pipeline that gets arbitrary video into the system reliably, the retargeting layer that maps a single reconstruction onto multiple target humanoids' own joint structures and dynamics, and the feature-extraction stage that produces structured, queryable output — is our own work, built specifically for this purpose.</p>
-        <p>That meant solving problems a research paper doesn't have to: environment setup that survives a clean rebuild, dependency conflicts between components built years apart, GPU memory ceilings that show up only at certain clip lengths, a multi-robot retargeting layer where the original method only ever targeted one, and a deployment-facing dashboard that a non-technical stakeholder can actually run.</p>
+        <p>The production scene-and-human reconstruction design builds on <a href="https://arxiv.org/abs/2505.03729" target="_blank" rel="noopener">VideoMimic</a>. Our retargeting formulation is informed by published GMR/GRAIL work, but the KHI proof does not consume their released robot-motion data: it starts from the selected human video and recomputes G1 joints with HCS code against the KHI URDF.</p>
+        <p>Our engineering work is the auditable connection between those components: source and rights records, quality gates, body-frame normalization, task-specific robot constraints, joint-limit and temporal checks, KHI serialization, and receipts that distinguish technical lineage from simulation, physical, and release readiness.</p>
       </div>
       <div>
         <div class="credit-box">
           <div class="k">Research foundation</div>
-          <p>The reconstruction stage builds on <a href="https://arxiv.org/abs/2505.03729" target="_blank" rel="noopener">VideoMimic</a> (CoRL 2025). We did not develop the underlying reconstruction algorithm — our contribution is the data-acquisition pipeline around it, the multi-robot retargeting layer downstream of it, the feature-extraction work on top of it, and the production validation that makes it deployable.</p>
+          <p>The reconstruction stage builds on <a href="https://arxiv.org/abs/2505.03729" target="_blank" rel="noopener">VideoMimic</a> (CoRL 2025). We did not develop its reconstruction or baseline G1 real-to-sim algorithms. Our contribution is the provenance/quality system, independently implemented embodiment optimization, task profiles and adapters, and evidence-driven integration with customer robot stacks such as KHI's G1 project.</p>
         </div>
         <div class="credit-box">
           <div class="k">Prior experience</div>

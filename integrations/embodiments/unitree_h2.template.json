@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "kind": "anchor_embodiment_profile_v1",
+  "status": "template_requires_verified_urdf",
+  "robot_id": "unitree_h2_unverified",
+  "instructions": [
+    "Install the exact vendor H2 URDF or MJCF-derived URDF used by the target controller.",
+    "Populate joint_order with the controller order and verify every axis and limit.",
+    "Map human semantic markers to H2 links and choose active joint subsets.",
+    "Run FK/Jacobian, joint-limit, temporal and simulator regression tests.",
+    "Change status to validated only after those checks pass."
+  ],
+  "joint_order": [],
+  "marker_links": {},
+  "skeleton_edges": [],
+  "profiles": {}
+}

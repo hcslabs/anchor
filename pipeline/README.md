@@ -5,15 +5,14 @@ provenance-verified, feasibility-checked, robot-ready training data out.
 
 ```
 Intake → Trust → Gates → Enrich → Retarget → Package → Serve
-  open   closed   open     open     closed     open     open
+working interface working  partial  HCS-G1     stub     stub
 ```
 
-This SDK ships the **open stages as working code** and the closed stages as
-interface stubs. That split is deliberate: what's open is everything a team
-needs to *plug into* Anchor — connectors, schemas, gates, segmentation, the
-Noise-as-Signal sampler. What's closed is the part that makes
-Anchor's output trustworthy and deployable — the Trust scoring method and the
-retargeting correspondence method.
+This SDK distinguishes working code, partial stages, stubs, and closed method
+interfaces. It includes connectors, schemas, gates, segmentation, the
+Noise-as-Signal sampler, a dependency-light HCS Unitree G1 retargeter, and a
+hash-bound KHI proof adapter. The learned Trust scoring method and advanced
+contact-/object-aware retargeting remain closed or incomplete.
 
 ## Install
 
@@ -23,6 +22,8 @@ pip install -e .                       # core: numpy only
 pip install -e ".[ingest]"             # + source connectors (requests)
 pip install -e ".[segment]"            # + CLIP-based segmentation (torch, transformers)
 pip install -e ".[noise]"              # + Noise-as-Signal extras (scipy)
+pip install -e ".[proof]"              # + human-video proof + KHI export
+pip install -e ".[policy]"             # + phase-conditioned motion policy
 ```
 
 ## 60-second tour
@@ -40,6 +41,10 @@ print(ep.to_json())                              # full audit trail, gates inclu
 anchor probe clip.mp4        # same thing from the shell
 anchor gates clip.mp4
 anchor stages                # the seven stages and their open/closed status
+anchor extract-human-pose ...
+anchor retarget-g1 ... --profile khi_tabletop_right
+anchor export-khi-g1 ...
+anchor proof-verify ...
 ```
 
 Runnable end-to-end scripts live in [`examples/`](examples):
@@ -60,10 +65,15 @@ src/anchor/
   ingest/         intake (ffprobe) + scout connectors (θ_scope lives here)             [open]
                   crawler.py — allowlist, robots-respecting crawl skeleton              [open, placeholder]
   quality/        gate cascade — open tier real, learned tier closed (θ_proc)          [open/closed]
-  enrich/         segmentation open (CLIPSeg); pose/depth/hands/contact stubs          [open/stubs]
+  enrich/         segmentation + screening pose; depth/hands/contact stubs             [open/stubs]
   noise/          Noise-as-Signal empirical residual sampler                           [open, in validation]
   trust/          provenance scoring, synthetic screening, dedup                       [CLOSED]
-  retarget/       reconstruction → robot joint mapping + feasibility                   [CLOSED]
+  retarget/       HCS G1 DLS solver working; advanced contact/object methods closed      [working/closed]
+  integrations/   KHI G1 joblib export + loader-compatible validation                  [working]
+  policy/         video-derived phase policy for physics/RL warm-start                 [working]
+  sim/            URDF surrogate and simulator evidence contracts                      [working]
+  agent/          bounded recipe search and production evidence gates                  [working]
+  proof.py        no-copy SHA-256 lineage manifest + verifier                          [working]
   latents/        cached encoder feature store                                         [stub]
   package/        dataset shards + auto-datasheets (LeRobot-v3 export planned)         [stub]
   pipeline/       stage registry + runner                                              [open/stub]
@@ -108,12 +118,12 @@ The approach, status, and the figure explaining why this beats Gaussian
 augmentation: project page, **§04.5 — Noise as signal**. Results are being
 validated internally.
 
-## What's closed, exactly
+## What's closed or incomplete, exactly
 
 | stage | public | closed |
 |---|---|---|
 | Trust | the tier ladder (`TrustTier`), the interfaces | provenance classifier, synthetic-content screens, near-dup index |
-| Retarget | stage shape (reconstruction in → joints + feasibility out), validation results | correspondence + shape-fitting method |
+| Retarget | HCS G1 body retargeter, URDF FK/Jacobians, KHI export/proof | advanced hand/contact/object correspondence and other embodiment adapters |
 
 Closed modules raise `NotImplementedError` with a pointer here. As stages
 mature past internal validation we expect to open more — starting with the

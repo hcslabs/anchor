@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "kind": "anchor_motion_prior_policy_receipt_v1",
+  "method": "phase_conditioned_imitation_with_velocity_and_acceleration_regularization",
+  "policy_role": "video_motion_prior_warm_start_before_physics_residual_learning",
+  "source_trajectory": {
+    "path": "/workspace/anchor-khi-closed-loop-20261014/generated/closed_loop_final/candidate_01_GRAB_official_lateral_offset_reach_grasp_lift_phone/trajectory_balanced.json",
+    "sha256": "bd0c2526cdacd3a6057af20bd0043983bb8d5ffc6bf4fae6f8fb157cbf3fb331"
+  },
+  "source_video": {
+    "path": "/workspace/anchor-khi-closed-loop-20261014/inputs/videos/GRAB_official_lateral_offset_reach_grasp_lift_phone.mp4",
+    "sha256": "73706d15a156087570a7db49b8a319cc12e9885c0f02c15e494a6d122689a460",
+    "content_id": "anc1-73706d15a156087570a7db49b8a319cc12e9885c0f02c15e494a6d122689a460",
+    "rights_status": "requires_manifest_attestation"
+  },
+  "embodiment_profile": {
+    "path": "/workspace/anchor-khi-closed-loop-20261014/integrations/khi_g1/unitree_g1_29dof.embodiment.json",
+    "sha256": "94919e03ce145bbd3ea336c2163ef222b987639ad5a1741f33d4959068e5b93b"
+  },
+  "urdf": {
+    "path": "/workspace/anchor-khi-closed-loop-20261014/khi_source/g1_29dof_pc2.urdf",
+    "sha256": "05c644bbf64ddea02c701f07c636c643930690a7072eaa38157ac7b362109011"
+  },
+  "active_joints": [
+    "waist_yaw_joint",
+    "waist_roll_joint",
+    "waist_pitch_joint",
+    "right_shoulder_pitch_joint",
+    "right_shoulder_roll_joint",
+    "right_shoulder_yaw_joint",
+    "right_elbow_joint",
+    "right_wrist_roll_joint",
+    "right_wrist_pitch_joint",
+    "right_wrist_yaw_joint"
+  ],
+  "fps": 5.0,
+  "frame_count": 53,
+  "feature_contract": {
+    "phase": true,
+    "fourier_harmonics": 4,
+    "dimension": 9
+  },
+  "training": {
+    "epochs": 1200,
+    "seed": 7,
+    "hidden_size": 128,
+    "learning_rate": 0.003,
+    "device": "cuda",
+    "domain_randomization": {
+      "phase_std": 0.002,
+      "feature_noise_std": 0.001
+    },
+    "final": {
+      "epoch": 1200,
+      "loss": 0.0026763309724628925,
+      "position_loss": 0.002656742464751005,
+      "velocity_loss": 0.0002328965929336846,
+      "acceleration_loss": 0.0007943746750243008
+    }
+  },
+  "fit": {
+    "joint_rmse_rad": 0.00459228316321969,
+    "maximum_joint_error_rad": 0.02619194984436035
+  },
+  "artifact": {
+    "path": "/workspace/anchor-khi-closed-loop-20261014/generated/isaaclab_policy_physics/policy/anchor_phase_policy.pt",
+    "sha256": "06afcde00f17ec60c4967e4a300db54804655f62b28613ed1485b7540e2fc18c",
+    "format": "torchscript"
+  },
+  "physical_robot_commands_sent": false,
+  "production_release_ready": false
+}

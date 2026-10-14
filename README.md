@@ -34,9 +34,47 @@ Working code in the SDK today: scoped **source connectors** (licensed-API
 acquisition, local/partner drops), **ffprobe intake** with content addressing,
 the **quality-gate cascade** (open tier), **CLIP-based prompt-driven person
 segmentation**, and the **Noise-as-Signal residual sampler** —
-plus four runnable [examples](pipeline/examples). See
+an HCS-owned **morphology-aware Unitree G1 retargeter**, a KHI reference
+exporter, and a hash-bound proof verifier — plus four runnable
+[examples](pipeline/examples). See
 [`pipeline/README.md`](pipeline/README.md) for the full module map and the
 honest open/closed table.
+
+## KHI human-video proof
+
+[`integrations/khi_g1/README.md`](integrations/khi_g1/README.md) contains the
+reproducible HCS human-video → G1 → KHI integration. The proof hashes the
+original video and every derived artifact without copying the large KHI
+handoff. Released GRAIL/GRAB robot trajectories are not used as motion input.
+The current receipt is a screening-lineage pass, not a physics or real-robot
+success claim.
+
+## Portable embodiment and policy loop
+
+The retargeting optimizer is robot-agnostic. Robot joint names, semantic
+marker links and active full-body or upper-body subsets live in validated
+embodiment profiles under [`integrations/embodiments`](integrations/embodiments).
+The full reproducible flow—including the video-derived phase policy, Isaac Lab
+physics receipt and production release gates—is documented in
+[`docs/ANCHOR_VIDEO_TO_PRODUCTION.md`](docs/ANCHOR_VIDEO_TO_PRODUCTION.md).
+
+```text
+video -> 3-D human motion -> morphology retargeting -> motion-prior policy
+      -> physics/task learning -> feedback receipt -> bounded Anchor revision
+```
+
+The supplied KHI physics path deliberately remains non-actuating. Its public
+collision surrogate preserves the KHI URDF joints, inertials, axes and limits,
+but not confidential vendor mesh geometry; it therefore cannot by itself
+qualify grasp contacts or a production release.
+
+The 2026-10-14 GPU evidence is checked in under
+[`evidence/vast_20261014/isaaclab_policy_physics`](evidence/vast_20261014/isaaclab_policy_physics):
+the video-derived policy fit reached 0.00459 rad joint RMSE, and the Isaac Lab
+fixed-base upper-body playback reached 0.04880 rad active-joint RMSE with zero
+joint-limit violations over 2,120 physics steps. The combined release receipt
+still blocks production until exact collision/contact assets and task-level
+grasp/hold evidence exist.
 
 ## Noise as Signal
 
@@ -48,17 +86,21 @@ internally; a public sampler skeleton lives in `anchor.noise`.
 
 ## Validation
 
-The reconstruction stage builds on [VideoMimic](https://arxiv.org/abs/2505.03729)
-(CoRL 2025); we re-ran its own evaluation protocol (SLOPER4D filtered subset)
-and report our measured numbers on the page — clearly separated from cited
-baselines. Everything downstream of reconstruction — acquisition, multi-robot
-retargeting, feature extraction — is our own work.
+The production reconstruction design builds on
+[VideoMimic](https://arxiv.org/abs/2505.03729) (CoRL 2025). VideoMimic also
+publishes a baseline G1 real-to-sim retargeting path; Anchor does not claim
+that published work as HCS IP. HCS's contribution in this repository is the
+provenance/quality layer, the independently implemented robot-proportioned
+DLS retargeter, task-specific KHI profile, export adapter, and proof system.
+Historical benchmark numbers on the project page are not part of the new KHI
+proof receipt unless their raw run bundle is separately attached and hashed.
 
 ## What's deliberately withheld
 
-The Trust + Gates classification logic and the retargeting correspondence /
-shape-fitting method. Diagrams mark these with dashed borders and a lock;
-code marks them with interface stubs that raise `NotImplementedError`.
+The learned Trust classifier and advanced contact-/object-aware retargeting
+remain closed or incomplete. The dependency-light HCS G1 body retargeter is
+working code in `anchor.retarget.hcs_g1`; unrelated advanced method interfaces
+remain explicit stubs.
 
 ## Contact
 

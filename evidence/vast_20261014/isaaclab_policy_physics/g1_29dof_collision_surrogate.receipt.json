@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "anchor_urdf_collision_surrogate_receipt_v1",
+  "source": {
+    "path": "/workspace/anchor-khi-closed-loop-20261014/khi_source/g1_29dof_pc2.urdf",
+    "sha256": "05c644bbf64ddea02c701f07c636c643930690a7072eaa38157ac7b362109011"
+  },
+  "output": {
+    "path": "/workspace/anchor-khi-closed-loop-20261014/generated/isaaclab_policy_physics/g1_29dof_collision_surrogate.urdf",
+    "sha256": "757516e1a186f21284c36299980c25df5492d50e2fe3c52b50a233d4794ff5db"
+  },
+  "kinematics_preserved": true,
+  "inertials_preserved": true,
+  "production_collision_geometry_preserved": false,
+  "allowed_use": "fixed_base_joint_dynamics_and_pipeline_screening_only"
+}
